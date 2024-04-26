@@ -53,6 +53,11 @@ public class StockQuoteJpaEntity {
 		setPreviousClosePrice(stockQuote.previousClosePrice());
 		setUpdatedAt(stockQuote.updatedAt());
 	}
+	
+	public StockQuote toStockQuote() {
+		return StockQuote.of(id, symbol, currentPrice, change, percentChange, highPrice, 
+				lowPrice, openPrice, previousClosePrice, updatedAt);
+	}
 
 	public String getId() {
 		return id;
