@@ -6,13 +6,13 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import co.com.tecso.utoppia.challenge.domain.GetLatestStoredQuoteService;
+import co.com.tecso.utoppia.challenge.domain.GetStoredQuotesService;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 import co.com.tecso.utoppia.challenge.domain.StockQuoteSaver;
 
 @Service
 
-public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetLatestStoredQuoteService {
+public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQuotesService {
 
 	private StockQuoteJpaRepository repository;
 	
