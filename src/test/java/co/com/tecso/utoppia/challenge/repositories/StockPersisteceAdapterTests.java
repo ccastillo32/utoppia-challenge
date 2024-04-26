@@ -36,7 +36,7 @@ final class StockPersisteceAdapterTests {
 		BigDecimal lowPrice = new BigDecimal("169.19");
 		BigDecimal openPrice = new BigDecimal("169.87");
 		BigDecimal previousClosePrice = new BigDecimal("169.89");
-		LocalDateTime updatedAt = EpochConverter.toLocalDateTime(1714161559);
+		LocalDateTime updatedAt = EpochConverter.toLocalDateTime(1714161559); // 26/04/2024 at 19:59:19
 		
 		StockQuote data = StockQuote.of(id, symbol, currentPrice, change, percentChange, highPrice, 
 				lowPrice, openPrice, previousClosePrice, updatedAt); // TODO: Move to StockTestData or something
@@ -44,6 +44,12 @@ final class StockPersisteceAdapterTests {
 		assertDoesNotThrow(() -> {
 			persisteceAdapter.save(data);
 		});
+		
+		LocalDate today = LocalDate.of(2024, 04, 26);
+		Optional<StockQuote> latestStoredInBD = persisteceAdapter.getLatestStoredQuoteByDate(symbol, today);
+		
+		Assertions.assertThat( latestStoredInBD ).isPresent();
+		assertEquals(latestStoredInBD.get(), data);
 		
 	}
 	
