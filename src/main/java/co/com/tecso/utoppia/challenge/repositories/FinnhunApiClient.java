@@ -3,6 +3,7 @@ package co.com.tecso.utoppia.challenge.repositories;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -26,12 +27,13 @@ public class FinnhunApiClient implements GetStockDataService {
 		String url = getQuoteURL(symbol);
 		ResponseEntity<GetStockDataResponse> response = restTemplate.getForEntity(url, GetStockDataResponse.class);
 		
-		// TODO: If response == 200
-		// TODO: Validate empty response
+		if ( !(response.getStatusCode().equals(HttpStatus.OK))) {
+			return Optional.empty();
+		}
 		
 		GetStockDataResponse apiResponse = response.getBody();
 		
-		if (apiResponse.isEmpty()) {
+		if (apiResponse == null || apiResponse.isEmpty()) {
 			return Optional.empty();
 		}
 		
