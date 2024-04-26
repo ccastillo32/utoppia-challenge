@@ -3,7 +3,7 @@ package co.com.tecso.utoppia.challenge.domain;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record Stock (
+public record StockQuote (
 	
 	String id,
 	String symbol,
@@ -18,7 +18,7 @@ public record Stock (
 		
 ) {
 	
-	public static Stock of (
+	public static StockQuote of (
 			String id,
 			String symbol,
 			BigDecimal currentPrice,
@@ -30,7 +30,7 @@ public record Stock (
 			BigDecimal previousClosePrice,
 			LocalDateTime updatedAt
 	) {
-		return new Stock(id, symbol, currentPrice, change, percentChange, highPrice, lowPrice,
+		return new StockQuote(id, symbol, currentPrice, change, percentChange, highPrice, lowPrice,
 					openPrice, previousClosePrice, updatedAt);
 	}
 	

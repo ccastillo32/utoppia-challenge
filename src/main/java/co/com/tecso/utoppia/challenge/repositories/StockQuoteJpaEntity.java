@@ -3,14 +3,14 @@ package co.com.tecso.utoppia.challenge.repositories;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import co.com.tecso.utoppia.challenge.domain.Stock;
+import co.com.tecso.utoppia.challenge.domain.StockQuote;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-@Entity(name = "stocks")
+@Entity(name = "stock_quotes")
 
-public class StockJpaEntity {
+public class StockQuoteJpaEntity {
 
 	@Id
 	private String id;
@@ -39,19 +39,19 @@ public class StockJpaEntity {
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 	
-	public StockJpaEntity() {}
+	public StockQuoteJpaEntity() {}
 	
-	public StockJpaEntity(Stock stock) {
-		setId(stock.id());
-		setSymbol(stock.symbol());
-		setCurrentPrice(stock.currentPrice());
-		setChange(stock.change());
-		setPercentChange(stock.percentChange());
-		setHighPrice(stock.highPrice());
-		setLowPrice(stock.lowPrice());
-		setOpenPrice(stock.openPrice());
-		setPreviousClosePrice(stock.previousClosePrice());
-		setUpdatedAt(stock.updatedAt());
+	public StockQuoteJpaEntity(StockQuote stockQuote) {
+		setId(stockQuote.id());
+		setSymbol(stockQuote.symbol());
+		setCurrentPrice(stockQuote.currentPrice());
+		setChange(stockQuote.change());
+		setPercentChange(stockQuote.percentChange());
+		setHighPrice(stockQuote.highPrice());
+		setLowPrice(stockQuote.lowPrice());
+		setOpenPrice(stockQuote.openPrice());
+		setPreviousClosePrice(stockQuote.previousClosePrice());
+		setUpdatedAt(stockQuote.updatedAt());
 	}
 
 	public String getId() {

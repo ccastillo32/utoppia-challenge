@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import co.com.tecso.utoppia.challenge.domain.Stock;
+import co.com.tecso.utoppia.challenge.domain.StockQuote;
 import co.com.tecso.utoppia.challenge.util.EpochConverter;
 
 @DataJpaTest
@@ -18,7 +18,7 @@ import co.com.tecso.utoppia.challenge.util.EpochConverter;
 final class StockPersisteceAdapterTests {
 
 	@Autowired
-	private StockPersisteceAdapter persisteceAdapter;
+	private StockQuotePersisteceAdapter persisteceAdapter;
 	
 	@Test
 	void saveStock() {
@@ -34,7 +34,7 @@ final class StockPersisteceAdapterTests {
 		BigDecimal previousClosePrice = new BigDecimal("169.89");
 		LocalDateTime updatedAt = EpochConverter.toLocalDateTime(1714161559);
 		
-		Stock data = Stock.of(id, symbol, currentPrice, change, percentChange, highPrice, 
+		StockQuote data = StockQuote.of(id, symbol, currentPrice, change, percentChange, highPrice, 
 				lowPrice, openPrice, previousClosePrice, updatedAt); // TODO: Move to StockTestData or something
 		
 		assertDoesNotThrow(() -> {
