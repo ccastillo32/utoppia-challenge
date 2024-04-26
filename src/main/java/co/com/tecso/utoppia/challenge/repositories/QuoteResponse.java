@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import co.com.tecso.utoppia.challenge.domain.StockData;
+import co.com.tecso.utoppia.challenge.domain.Stock;
 import co.com.tecso.utoppia.challenge.util.EpochConverter;
 
 public record QuoteResponse (
@@ -25,8 +25,8 @@ public record QuoteResponse (
 		return new QuoteResponse(c, d, dp, h, l, o, pc, t);
 	}
 	
-	public StockData toStockData(String symbol) {
-		return StockData.of(generateId(), symbol, c, dp, dp, parseTime(t));
+	public Stock toStockData(String symbol) {
+		return Stock.of(generateId(), symbol, c, dp, dp, h, l, o, pc, parseTime(t));
 	}
 	
 	private String generateId() {
