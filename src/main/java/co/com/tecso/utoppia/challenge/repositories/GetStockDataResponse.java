@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import co.com.tecso.utoppia.challenge.domain.StockData;
+import co.com.tecso.utoppia.challenge.util.EpochConverter;
 
 public record GetStockDataResponse (
 	
@@ -32,8 +33,8 @@ public record GetStockDataResponse (
 		return UUID.randomUUID().toString();
 	}
 	
-	private LocalDateTime parseTime(long epochTime) { // TODO: Parse
-		return LocalDateTime.now();
+	private LocalDateTime parseTime(long epochTime) {
+		return EpochConverter.toLocalDateTime(epochTime);
 	}
 	
 	private GetStockDataResponse emptyResponse() {
