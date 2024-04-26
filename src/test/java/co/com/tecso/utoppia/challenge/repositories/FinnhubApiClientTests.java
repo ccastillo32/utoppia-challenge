@@ -19,7 +19,7 @@ final class FinnhubApiClientTests {
 	@Test
 	void success() {
 		
-		Optional<StockData> result = getStockData("AAPL");
+		Optional<StockData> result = getStockDataFromAPI("AAPL");
 		Assertions.assertThat(result).isNotEmpty();
 		
 	}
@@ -27,12 +27,12 @@ final class FinnhubApiClientTests {
 	@Test
 	void emptyResponseForUnknownSymbol() {
 		
-		Optional<StockData> result = getStockData("AAPL22");
+		Optional<StockData> result = getStockDataFromAPI("AAPL22");
 		Assertions.assertThat(result).isEmpty();
 		
 	}
 	
-	private Optional<StockData> getStockData(String symbol) {
+	private Optional<StockData> getStockDataFromAPI(String symbol) {
 		return finnhunApiClient.getLatestStockData(symbol);
 	}
 	

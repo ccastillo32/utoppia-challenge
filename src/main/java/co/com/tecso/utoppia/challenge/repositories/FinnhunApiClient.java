@@ -21,28 +21,42 @@ public class FinnhunApiClient implements GetStockDataService {
 	@Value("${finnhub.api.key}")
 	private String key;
 	
+	private static final String QUOTE = "{baseURL}/quote?symbol={symbol}&token={token}";
+	
+	private final RestTemplate restTemplate = new RestTemplate();
+	
 	@Override
 	public Optional<StockData> getLatestStockData(String symbol) {
-		RestTemplate restTemplate = new RestTemplate();
-		String url = getQuoteURL(symbol);
-		ResponseEntity<GetStockDataResponse> response = restTemplate.getForEntity(url, GetStockDataResponse.class);
+		
+		ResponseEntity<QuoteResponse> response = callAPI(symbol);
 		
 		if ( !(response.getStatusCode().equals(HttpStatus.OK))) {
 			return Optional.empty();
 		}
 		
-		GetStockDataResponse apiResponse = response.getBody();
+		QuoteResponse responseBody = response.getBody();
 		
-		if (apiResponse == null || apiResponse.isEmpty()) {
-			return Optional.empty();
-		}
+		return processResponse(responseBody, symbol);
 		
-		return Optional.of( apiResponse.toStockData(symbol) );
 	}
 	
 	private String getQuoteURL(String symbol) {
-		return String.format("%s/quote?symbol=%s&token=%s", 
-					baseURL, symbol, key);
+			return QUOTE.replace("{baseURL}", baseURL)
+						.replace("{symbol}", symbol)
+						.replace("{token}", key);
+	}
+	
+	private ResponseEntity<QuoteResponse> callAPI(String symbol) {
+		String url = getQuoteURL(symbol);
+		return restTemplate.getForEntity(url, QuoteResponse.class);
+	}
+	
+	private Optional<StockData> processResponse(QuoteResponse responseBody, String symbol) {
+		if (responseBody == null || responseBody.isEmpty()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of( responseBody.toStockData(symbol) );
 	}
 
 }

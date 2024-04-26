@@ -7,7 +7,7 @@ import java.util.UUID;
 import co.com.tecso.utoppia.challenge.domain.StockData;
 import co.com.tecso.utoppia.challenge.util.EpochConverter;
 
-public record GetStockDataResponse (
+public record QuoteResponse (
 	
 	BigDecimal c,
 	BigDecimal d,
@@ -20,9 +20,9 @@ public record GetStockDataResponse (
 		
 ) {
 	
-	public static GetStockDataResponse of(BigDecimal c, BigDecimal d, Double dp, BigDecimal h, 
+	public static QuoteResponse of(BigDecimal c, BigDecimal d, Double dp, BigDecimal h, 
 			BigDecimal l, BigDecimal o, BigDecimal pc, long t) {
-		return new GetStockDataResponse(c, d, dp, h, l, o, pc, t);
+		return new QuoteResponse(c, d, dp, h, l, o, pc, t);
 	}
 	
 	public StockData toStockData(String symbol) {
@@ -37,7 +37,7 @@ public record GetStockDataResponse (
 		return EpochConverter.toLocalDateTime(epochTime);
 	}
 	
-	private GetStockDataResponse emptyResponse() {
+	private QuoteResponse emptyResponse() {
 		return of(BigDecimal.ZERO, null, null, BigDecimal.ZERO, 
 				BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, 0l);
 	}
