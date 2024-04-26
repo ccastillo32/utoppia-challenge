@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import co.com.tecso.utoppia.challenge.domain.StockData;
+import co.com.tecso.utoppia.challenge.domain.Stock;
 
 @SpringBootTest
 
@@ -19,7 +19,7 @@ final class FinnhubApiClientTests {
 	@Test
 	void success() {
 		
-		Optional<StockData> result = quote("AAPL");
+		Optional<Stock> result = quote("AAPL");
 		Assertions.assertThat(result).isNotEmpty();
 		
 	}
@@ -27,12 +27,12 @@ final class FinnhubApiClientTests {
 	@Test
 	void emptyResponseForUnknownSymbol() {
 		
-		Optional<StockData> result = quote("AAPL22");
+		Optional<Stock> result = quote("AAPL22");
 		Assertions.assertThat(result).isEmpty();
 		
 	}
 	
-	private Optional<StockData> quote(String symbol) {
+	private Optional<Stock> quote(String symbol) {
 		return finnhunApiClient.getLatestStockData(symbol);
 	}
 	

@@ -8,12 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import co.com.tecso.utoppia.challenge.domain.GetStockDataService;
-import co.com.tecso.utoppia.challenge.domain.StockData;
+import co.com.tecso.utoppia.challenge.domain.GetStockService;
+import co.com.tecso.utoppia.challenge.domain.Stock;
 
 @Service
 
-public class FinnhunApiClient implements GetStockDataService {
+public class FinnhunApiClient implements GetStockService {
 
 	@Value("${finnhub.api.endpoint}")
 	private String baseURL;
@@ -26,7 +26,7 @@ public class FinnhunApiClient implements GetStockDataService {
 	private final RestTemplate restTemplate = new RestTemplate();
 	
 	@Override
-	public Optional<StockData> getLatestStockData(String symbol) {
+	public Optional<Stock> getLatestStockData(String symbol) {
 		
 		ResponseEntity<QuoteResponse> response = callAPI(symbol);
 		
@@ -51,7 +51,7 @@ public class FinnhunApiClient implements GetStockDataService {
 		return restTemplate.getForEntity(url, QuoteResponse.class);
 	}
 	
-	private Optional<StockData> processResponse(QuoteResponse responseBody, String symbol) {
+	private Optional<Stock> processResponse(QuoteResponse responseBody, String symbol) {
 		if (responseBody == null || responseBody.isEmpty()) {
 			return Optional.empty();
 		}
