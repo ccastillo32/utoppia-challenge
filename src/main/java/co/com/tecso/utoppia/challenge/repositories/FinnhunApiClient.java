@@ -2,21 +2,28 @@ package co.com.tecso.utoppia.challenge.repositories;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import co.com.tecso.utoppia.challenge.domain.GetStockDataService;
 import co.com.tecso.utoppia.challenge.domain.StockData;
 
-@Repository
+@Service
 
 public class FinnhunApiClient implements GetStockDataService {
 
+	@Value("${finnhub.api.endpoint}")
+	private String baseURL;
+	
+	@Value("${finnhub.api.key}")
+	private String key;
+	
 	@Override
 	public Optional<StockData> getLatestStockData(String symbol) {
 		RestTemplate restTemplate = new RestTemplate();
-		String url = "https://finnhub.io/api/v1/quote?symbol=AAPL&token=cojvlkpr01qq4pku97e0cojvlkpr01qq4pku97eg";
+		String url = getQuoteURL(symbol);
 		ResponseEntity<GetStockDataResponse> response = restTemplate.getForEntity(url, GetStockDataResponse.class);
 		
 		// TODO: If response == 200
@@ -24,6 +31,11 @@ public class FinnhunApiClient implements GetStockDataService {
 		
 		StockData result = response.getBody().toStockData(symbol); 
 		return Optional.of(result);
+	}
+	
+	private String getQuoteURL(String symbol) {
+		return String.format("%s/quote?symbol=%s&token=%s", 
+					baseURL, symbol, key);
 	}
 
 }
