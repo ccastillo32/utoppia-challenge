@@ -10,7 +10,7 @@ public record GetStockDataResponse (
 	
 	BigDecimal c,
 	BigDecimal d,
-	double dp,
+	Double dp,
 	BigDecimal h,
 	BigDecimal l,
 	BigDecimal o,
@@ -19,7 +19,7 @@ public record GetStockDataResponse (
 		
 ) {
 	
-	public static GetStockDataResponse of(BigDecimal c, BigDecimal d, double dp, BigDecimal h, 
+	public static GetStockDataResponse of(BigDecimal c, BigDecimal d, Double dp, BigDecimal h, 
 			BigDecimal l, BigDecimal o, BigDecimal pc, long t) {
 		return new GetStockDataResponse(c, d, dp, h, l, o, pc, t);
 	}
@@ -34,6 +34,15 @@ public record GetStockDataResponse (
 	
 	private LocalDateTime parseTime(long epochTime) { // TODO: Parse
 		return LocalDateTime.now();
+	}
+	
+	private GetStockDataResponse emptyResponse() {
+		return of(BigDecimal.ZERO, null, null, BigDecimal.ZERO, 
+				BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, 0l);
+	}
+	
+	public boolean isEmpty() {
+		return emptyResponse().equals(this);
 	}
 	
 }

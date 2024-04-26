@@ -29,8 +29,13 @@ public class FinnhunApiClient implements GetStockDataService {
 		// TODO: If response == 200
 		// TODO: Validate empty response
 		
-		StockData result = response.getBody().toStockData(symbol); 
-		return Optional.of(result);
+		GetStockDataResponse apiResponse = response.getBody();
+		
+		if (apiResponse.isEmpty()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of( apiResponse.toStockData(symbol) );
 	}
 	
 	private String getQuoteURL(String symbol) {
