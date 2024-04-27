@@ -53,7 +53,7 @@ final class UpdateStockQuoteUseCaseTests {
 		useCase.updateStockQuote(command);
 		
 		Mockito.verify(stockQuoteSaver, Mockito.times(1))
-		   .save( StockQuoteData.latestStoredRecord() );
+		   .save( StockQuoteData.lastRecordOfTheDay() );
 		
 	}
 	
