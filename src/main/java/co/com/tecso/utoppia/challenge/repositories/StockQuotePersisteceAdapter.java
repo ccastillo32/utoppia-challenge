@@ -5,9 +5,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import co.com.tecso.utoppia.challenge.domain.GetStoredQuotesService;
+import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 import co.com.tecso.utoppia.challenge.domain.StockQuoteSaver;
 
@@ -43,12 +47,23 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 	}
 
 	@Override
-	public List<StockQuote> getAll() {
+	public PagedList<StockQuote> getAll(int pageNumber, int pageLimit) {
 		
-		return repository.findAll()
-						 .stream()
-						 .map(StockQuoteJpaEntity::toStockQuote)
-						 .toList();
+		Pageable pageable = PageRequest.of(pageNumber, pageLimit);
+		
+		Page<StockQuoteJpaEntity> content = repository.findAll(pageable);
+		
+		List<StockQuote> elements = content.getContent()
+				.stream()
+				.map(StockQuoteJpaEntity::toStockQuote)
+				.toList();
+		
+		return new PagedList<>(elements, 
+				content.getTotalElements(), 
+				content.getTotalPages(), 
+				content.getPageable().getOffset(), 
+				content.getPageable().getPageSize()
+		);
 		
 	}
 	

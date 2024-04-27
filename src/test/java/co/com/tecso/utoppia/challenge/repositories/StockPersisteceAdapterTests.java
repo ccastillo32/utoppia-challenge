@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import co.com.tecso.utoppia.challenge.application.data.StockQuoteData;
+import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 
 @DataJpaTest
@@ -67,9 +68,9 @@ final class StockPersisteceAdapterTests {
 		
 		persisteceAdapter.save(firstQuery);
 		
-		List<StockQuote> allRecords = persisteceAdapter.getAll();
+		PagedList<StockQuote> page = persisteceAdapter.getAll(0, 10);
 		
-		assertEquals(1, allRecords.size());
+		assertEquals(1, page.getTotalElements());
 		
 	}
 	
