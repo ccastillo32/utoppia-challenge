@@ -33,7 +33,7 @@ final class FinnhubApiClientTests {
 	}
 	
 	private Optional<StockQuote> quote(String symbol) {
-		return finnhunApiClient.getLatestPrices(symbol);
+		return finnhunApiClient.getLatestPricesByStockSymbol(symbol);
 	}
 	
 }

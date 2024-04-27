@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import co.com.tecso.utoppia.challenge.domain.GetStockQuotesService;
+import co.com.tecso.utoppia.challenge.domain.GetQuotesService;
 import co.com.tecso.utoppia.challenge.domain.GetStoredQuotesService;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 import co.com.tecso.utoppia.challenge.domain.StockQuoteSaver;
@@ -13,14 +13,14 @@ import co.com.tecso.utoppia.challenge.domain.StockQuoteSaver;
 @Service
 public class UpdateStockQuoteUseCase {
 
-	private GetStockQuotesService stockInfoService;
-	private GetStoredQuotesService storedQuotesService;
+	private GetQuotesService getQuotesService;
+	private GetStoredQuotesService getStoredQuotesService;
 	private StockQuoteSaver stockQuoteSaver;
 	
-	public UpdateStockQuoteUseCase(GetStockQuotesService stockInfoService, GetStoredQuotesService storedQuotesService,
+	public UpdateStockQuoteUseCase(GetQuotesService stockInfoService, GetStoredQuotesService storedQuotesService,
 			StockQuoteSaver stockQuoteSaver) {
-		this.stockInfoService = stockInfoService;
-		this.storedQuotesService = storedQuotesService;
+		this.getQuotesService = stockInfoService;
+		this.getStoredQuotesService = storedQuotesService;
 		this.stockQuoteSaver = stockQuoteSaver;
 	}
 
@@ -28,39 +28,47 @@ public class UpdateStockQuoteUseCase {
 		
 		String stockSymbol = command.getSymbol();
 		
-		Optional<StockQuote> latestPrices = stockInfoService.getLatestPrices(stockSymbol);
+		StockQuote latestQuoteFromMarket = getLatestPriceFromMarket(stockSymbol);
 		
-		if (!latestPrices.isPresent()) {
-			throw new NoInformationFoundException();
-		}
+		Optional<StockQuote> latestQuoteStoredToday = getLatestPriceStoredToday(stockSymbol);
 		
-		Optional<StockQuote> latestStoredToday = storedQuotesService.getLatestStoredQuoteByDate(stockSymbol, LocalDate.now());
-		
-		if (latestStoredToday.isEmpty()) {
-			stockQuoteSaver.save( latestPrices.get() );
+		if (latestQuoteStoredToday.isEmpty()) {
+			saveQuote( latestQuoteFromMarket );
 			return;
 		}
 		
-		StockQuote updatedInfo = latestPrices.get();
-		StockQuote oldRecord = latestStoredToday.get();
-		
-		StockQuote updatedRecord = StockQuote.of(
-				oldRecord.id(), 
-				oldRecord.symbol(), 
-				updatedInfo.currentPrice(), 
-				updatedInfo.change(),
-				updatedInfo.percentChange(), 
-				updatedInfo.highPrice(), 
-				updatedInfo.lowPrice(), 
-				updatedInfo.openPrice(), 
-				updatedInfo.previousClosePrice(), 
-				updatedInfo.updatedAt()
-		);
-		
-		stockQuoteSaver.save(updatedRecord);
+		updateLatestStoredQuote(latestQuoteStoredToday.get(), latestQuoteFromMarket);
 		
 	}
 	
+	private StockQuote getLatestPriceFromMarket(String stockSymbol) {
+		return getQuotesService.getLatestPricesByStockSymbol(stockSymbol)
+							   .orElseThrow(NoInformationFoundException::new);
+	}
 	
+	private Optional<StockQuote> getLatestPriceStoredToday(String stockSymbol) {
+		return getStoredQuotesService.getLatestStoredQuoteByDate(stockSymbol, LocalDate.now());
+	}
+	
+	private void saveQuote(StockQuote quote) {
+		stockQuoteSaver.save( quote );
+	}
+	
+	private void updateLatestStoredQuote(StockQuote oldInfo, StockQuote newInfo) {
+		StockQuote updatedRecord = StockQuote.of(
+				oldInfo.id(), 
+				oldInfo.symbol(), 
+				newInfo.currentPrice(), 
+				newInfo.change(),
+				newInfo.percentChange(), 
+				newInfo.highPrice(), 
+				newInfo.lowPrice(), 
+				newInfo.openPrice(), 
+				newInfo.previousClosePrice(), 
+				newInfo.updatedAt()
+		);
+		
+		stockQuoteSaver.save(updatedRecord);
+	}
 	
 }

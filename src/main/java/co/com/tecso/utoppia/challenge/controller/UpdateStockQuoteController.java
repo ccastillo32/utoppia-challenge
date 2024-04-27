@@ -27,10 +27,8 @@ public class UpdateStockQuoteController {
 	@PostMapping("/api/stock-quotes/update")
 	@Operation(summary = "Get the latest stock quote and stores it")
 	@ApiResponses(value = {
-		@ApiResponse( responseCode = "204", 
-					  description = "Information updated successfully"),
-		@ApiResponse( responseCode = "400", 
-					  description = "Validation errors")
+		@ApiResponse( responseCode = "204", description = "Success"),
+		@ApiResponse( responseCode = "400", description = "Validation errors")
 	})
 	
 	public ResponseEntity<Void> handleRequest(@RequestBody UpdateQuoteRequest request) {
