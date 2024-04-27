@@ -2,6 +2,7 @@ package co.com.tecso.utoppia.challenge.repositories;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -38,6 +39,16 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 		return entity != null 
 					? Optional.of( entity.toStockQuote() )
 					: Optional.empty();
+		
+	}
+
+	@Override
+	public List<StockQuote> getAll() {
+		
+		return repository.findAll()
+						 .stream()
+						 .map(StockQuoteJpaEntity::toStockQuote)
+						 .toList();
 		
 	}
 	

@@ -33,11 +33,11 @@ public class UpdateStockQuoteUseCase {
 		Optional<StockQuote> latestQuoteStoredToday = getLatestPriceStoredToday(stockSymbol);
 		
 		if (latestQuoteStoredToday.isEmpty()) {
-			saveQuote( latestQuoteFromMarket );
+			saveStockQuote( latestQuoteFromMarket );
 			return;
 		}
 		
-		updateLatestStoredQuote(latestQuoteStoredToday.get(), latestQuoteFromMarket);
+		updateTodaysStockQuote(latestQuoteStoredToday.get(), latestQuoteFromMarket);
 		
 	}
 	
@@ -50,11 +50,11 @@ public class UpdateStockQuoteUseCase {
 		return getStoredQuotesService.getLatestStoredQuoteByDate(stockSymbol, LocalDate.now());
 	}
 	
-	private void saveQuote(StockQuote quote) {
+	private void saveStockQuote(StockQuote quote) {
 		stockQuoteSaver.save( quote );
 	}
 	
-	private void updateLatestStoredQuote(StockQuote oldInfo, StockQuote newInfo) {
+	private void updateTodaysStockQuote(StockQuote oldInfo, StockQuote newInfo) {
 		StockQuote recordToUpdate = newInfo.replaceId(oldInfo.id()); 
 		stockQuoteSaver.save( recordToUpdate );
 	}

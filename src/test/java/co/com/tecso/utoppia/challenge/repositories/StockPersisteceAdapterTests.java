@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
@@ -56,6 +57,19 @@ final class StockPersisteceAdapterTests {
 		
 		Assertions.assertThat( latestStoredData ).isPresent();
 		assertEquals(latestStoredData.get(), expectedResult);
+		
+	}
+	
+	@Test
+	void findAll() {
+		
+		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
+		
+		persisteceAdapter.save(firstQuery);
+		
+		List<StockQuote> allRecords = persisteceAdapter.getAll();
+		
+		assertEquals(1, allRecords.size());
 		
 	}
 	
