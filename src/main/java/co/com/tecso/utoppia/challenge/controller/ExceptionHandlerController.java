@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
 import co.com.tecso.utoppia.challenge.application.InvalidCommandException;
@@ -14,6 +15,7 @@ import co.com.tecso.utoppia.challenge.application.NoInformationFoundException;
 @ControllerAdvice
 public class ExceptionHandlerController {
 	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(InvalidCommandException.class)
 	public ResponseEntity<?> handleInvalidCommandException(InvalidCommandException exception, WebRequest req) {
 		
@@ -25,6 +27,7 @@ public class ExceptionHandlerController {
 		
 	}
 	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(NoInformationFoundException.class)
 	public ResponseEntity<?> handleNoInformationFoundException(NoInformationFoundException exception, WebRequest req) {
 		
