@@ -19,16 +19,19 @@ public class GetAllStockQuotesService {
 	
 	public PagedList<StockQuote> getAllStockQuotes(GetAllStockQuotesQuery query) {
 		
-		int pageSize = query.pageSize() == null 
-				? DEFAULT_PAGE_SIZE
-				: query.pageSize();
-		
+		int pageSize = getPageSize(query);
 		String stockSymbol = query.stockSymbol();
 		
 		return stockSymbol == null || stockSymbol.isBlank()
 				? getStoredQuotesService.getAll(pageSize, pageSize)
 				: getStoredQuotesService.getBySymbol(stockSymbol, query.pageNumber(), pageSize);
 		
+	}
+	
+	private int getPageSize(GetAllStockQuotesQuery query) {
+		return query.pageSize() == null 
+				? DEFAULT_PAGE_SIZE
+				: query.pageSize();
 	}
 	
 }
