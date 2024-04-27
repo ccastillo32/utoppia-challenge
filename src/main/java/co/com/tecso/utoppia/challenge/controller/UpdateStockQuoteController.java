@@ -26,7 +26,7 @@ public class UpdateStockQuoteController {
 		
 		useCase.updateStockQuote(command);
 		
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 		
 	}
 	

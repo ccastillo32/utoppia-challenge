@@ -31,7 +31,7 @@ public class UpdateStockQuoteUseCase {
 		Optional<StockQuote> latestPrices = stockInfoService.getLatestPrices(stockSymbol);
 		
 		if (!latestPrices.isPresent()) {
-			return;
+			throw new NoInformationFoundException();
 		}
 		
 		Optional<StockQuote> latestStoredToday = storedQuotesService.getLatestStoredQuoteByDate(stockSymbol, LocalDate.now());

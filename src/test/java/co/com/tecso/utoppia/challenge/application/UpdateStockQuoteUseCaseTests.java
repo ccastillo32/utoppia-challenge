@@ -1,5 +1,7 @@
 package co.com.tecso.utoppia.challenge.application;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -54,6 +56,20 @@ final class UpdateStockQuoteUseCaseTests {
 		
 		Mockito.verify(stockQuoteSaver, Mockito.times(1))
 		   .save( StockQuoteData.lastRecordOfTheDay() );
+		
+	}
+	
+	@Test
+	void checkUnknownSymbol() {
+		
+		Mockito.when(stockQuotesService.getLatestPrices(AAPL))
+		   .thenReturn( Optional.empty() );
+		
+		UpdateQuoteCommand command = UpdateQuoteCommand.of(AAPL);
+		
+		assertThrows(NoInformationFoundException.class, () -> {
+			useCase.updateStockQuote(command);
+		});
 		
 	}
 	
