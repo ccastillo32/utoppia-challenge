@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
@@ -73,5 +72,19 @@ final class StockPersisteceAdapterTests {
 		assertEquals(1, page.getTotalElements());
 		
 	}
+	
+	@Test
+	void findBySimbol() {
+		
+		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
+		
+		persisteceAdapter.save(firstQuery);
+		
+		PagedList<StockQuote> page = persisteceAdapter.getBySymbol(StockQuoteData.AAPL, 0, 10);
+		
+		assertEquals(1, page.getTotalElements());
+		
+	}
+	
 	
 }

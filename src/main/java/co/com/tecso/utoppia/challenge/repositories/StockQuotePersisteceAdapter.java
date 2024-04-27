@@ -53,6 +53,22 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 		
 		Page<StockQuoteJpaEntity> content = repository.findAll(pageable);
 		
+		return getPagedList(content);
+		
+	}
+
+	@Override
+	public PagedList<StockQuote> getBySymbol(String symbol, int pageNumber, int pageLimit) {
+		
+		Pageable pageable = PageRequest.of(pageNumber, pageLimit);
+		
+		Page<StockQuoteJpaEntity> content = repository.findBySymbol(symbol, pageable);
+		
+		return getPagedList(content);
+		
+	}
+	
+	private PagedList<StockQuote> getPagedList(Page<StockQuoteJpaEntity> content) {
 		List<StockQuote> elements = content.getContent()
 				.stream()
 				.map(StockQuoteJpaEntity::toStockQuote)
@@ -64,7 +80,6 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 				content.getPageable().getOffset(), 
 				content.getPageable().getPageSize()
 		);
-		
 	}
 	
 }
