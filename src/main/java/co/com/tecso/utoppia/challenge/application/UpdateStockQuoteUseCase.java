@@ -24,14 +24,14 @@ public class UpdateStockQuoteUseCase {
 		this.stockQuoteSaver = stockQuoteSaver;
 	}
 
-	public void updateStockQuote(String stockSymbol) {
+	public void updateStockQuote( UpdateQuoteCommand command ) {
 		
-		// TODO: Symbol is required
+		String stockSymbol = command.getSymbol();
 		
 		Optional<StockQuote> latestPrices = stockInfoService.getLatestPrices(stockSymbol);
 		
 		if (!latestPrices.isPresent()) {
-			return;
+			throw new NoInformationFoundException();
 		}
 		
 		Optional<StockQuote> latestStoredToday = storedQuotesService.getLatestStoredQuoteByDate(stockSymbol, LocalDate.now());

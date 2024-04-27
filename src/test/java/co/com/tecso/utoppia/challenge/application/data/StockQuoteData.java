@@ -8,7 +8,7 @@ import co.com.tecso.utoppia.challenge.util.EpochConverter;
 
 public class StockQuoteData {
 	
-	public static final String SYMBOL = "AAPL";
+	public static final String AAPL = "AAPL";
 
 	public static StockQuote firstQueryOfTheDay() { // TODO: Refactor methods
 		String id = "75b1a0cb-43ee-4b89-99ac-20b340ba54bd";
@@ -21,7 +21,7 @@ public class StockQuoteData {
 		BigDecimal previousClosePrice = new BigDecimal("169.89");
 		LocalDateTime updatedAt = EpochConverter.toLocalDateTime(1714161559); // 26/04/2024 at 19:59:19
 		
-		return StockQuote.of(id, SYMBOL, currentPrice, change, percentChange, highPrice, 
+		return StockQuote.of(id, AAPL, currentPrice, change, percentChange, highPrice, 
 				lowPrice, openPrice, previousClosePrice, updatedAt);
 	}
 	
@@ -36,11 +36,11 @@ public class StockQuoteData {
 		BigDecimal previousClosePrice = new BigDecimal("169.89");
 		LocalDateTime updatedAt = EpochConverter.toLocalDateTime(1714161601); // 26/04/2024 at 20:00:01
 		
-		return StockQuote.of(id, SYMBOL, currentPrice, change, percentChange, highPrice, 
+		return StockQuote.of(id, AAPL, currentPrice, change, percentChange, highPrice, 
 				lowPrice, openPrice, previousClosePrice, updatedAt);
 	}
 	
-	public static StockQuote latestStoredRecord() { // TODO: Refactor methods
+	public static StockQuote lastRecordOfTheDay() { // TODO: Refactor methods
 		String id = firstQueryOfTheDay().id();
 		BigDecimal currentPrice = secondQueryOfTheDay().currentPrice();
 		double change = secondQueryOfTheDay().change();
@@ -51,7 +51,7 @@ public class StockQuoteData {
 		BigDecimal previousClosePrice = secondQueryOfTheDay().previousClosePrice();
 		LocalDateTime updatedAt = secondQueryOfTheDay().updatedAt(); // 26/04/2024 at 19:59:19
 		
-		return StockQuote.of(id, SYMBOL, currentPrice, change, percentChange, highPrice, 
+		return StockQuote.of(id, AAPL, currentPrice, change, percentChange, highPrice, 
 				lowPrice, openPrice, previousClosePrice, updatedAt);
 	}
 	

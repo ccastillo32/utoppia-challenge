@@ -1,5 +1,7 @@
 package co.com.tecso.utoppia.challenge.application;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -32,7 +34,8 @@ final class UpdateStockQuoteUseCaseTests {
 		Mockito.when( storedQuotesService.getLatestStoredQuoteByDate(AAPL, today()) )
 				.thenReturn( Optional.empty() );
 		
-		useCase.updateStockQuote(AAPL);
+		UpdateQuoteCommand command = UpdateQuoteCommand.of(AAPL);
+		useCase.updateStockQuote(command);
 		
 		Mockito.verify(stockQuoteSaver, Mockito.times(1))
 			   .save( StockQuoteData.firstQueryOfTheDay() );
@@ -48,10 +51,25 @@ final class UpdateStockQuoteUseCaseTests {
 		Mockito.when( storedQuotesService.getLatestStoredQuoteByDate(AAPL, today()) )
 			.thenReturn( Optional.of( StockQuoteData.firstQueryOfTheDay() ) );
 		
-		useCase.updateStockQuote(AAPL);
+		UpdateQuoteCommand command = UpdateQuoteCommand.of(AAPL);
+		useCase.updateStockQuote(command);
 		
 		Mockito.verify(stockQuoteSaver, Mockito.times(1))
-		   .save( StockQuoteData.latestStoredRecord() );
+		   .save( StockQuoteData.lastRecordOfTheDay() );
+		
+	}
+	
+	@Test
+	void checkUnknownSymbol() {
+		
+		Mockito.when(stockQuotesService.getLatestPrices(AAPL))
+		   .thenReturn( Optional.empty() );
+		
+		UpdateQuoteCommand command = UpdateQuoteCommand.of(AAPL);
+		
+		assertThrows(NoInformationFoundException.class, () -> {
+			useCase.updateStockQuote(command);
+		});
 		
 	}
 	
