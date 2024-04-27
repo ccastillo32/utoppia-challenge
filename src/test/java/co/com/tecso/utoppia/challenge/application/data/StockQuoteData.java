@@ -2,7 +2,10 @@ package co.com.tecso.utoppia.challenge.application.data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
+import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 import co.com.tecso.utoppia.challenge.util.EpochConverter;
 
@@ -53,6 +56,20 @@ public class StockQuoteData {
 		
 		return StockQuote.of(id, AAPL, currentPrice, change, percentChange, highPrice, 
 				lowPrice, openPrice, previousClosePrice, updatedAt);
+	}
+	
+	public static PagedList<StockQuote> pagedList() {
+		
+		List<StockQuote> elements = List.of( lastRecordOfTheDay() ); 
+		
+		return new PagedList<StockQuote>(elements, 1, 1, 0, 0);
+		
+	}
+	
+	public static PagedList<StockQuote> emptyPagedList() {
+		
+		return new PagedList<StockQuote>(Collections.emptyList(), 1, 1, 0, 0);
+		
 	}
 	
 }

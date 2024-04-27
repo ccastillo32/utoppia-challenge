@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
 import co.com.tecso.utoppia.challenge.application.InvalidCommandException;
-import co.com.tecso.utoppia.challenge.application.NoInformationFoundException;
+import co.com.tecso.utoppia.challenge.application.NoInformationFoundInMarketException;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
@@ -28,8 +28,8 @@ public class ExceptionHandlerController {
 	}
 	
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(NoInformationFoundException.class)
-	public ResponseEntity<?> handleNoInformationFoundException(NoInformationFoundException exception, WebRequest req) {
+	@ExceptionHandler(NoInformationFoundInMarketException.class)
+	public ResponseEntity<?> handleNoInformationFoundException(NoInformationFoundInMarketException exception, WebRequest req) {
 		
 		Map<String, String> errors = Map.of("symbol", exception.getMessage());
 		

@@ -66,7 +66,7 @@ final class UpdateStockQuoteUseCaseTests {
 		
 		UpdateQuoteCommand command = UpdateQuoteCommand.of(AAPL);
 		
-		assertThrows(NoInformationFoundException.class, () -> {
+		assertThrows(NoInformationFoundInMarketException.class, () -> {
 			useCase.updateStockQuote(command);
 		});
 		

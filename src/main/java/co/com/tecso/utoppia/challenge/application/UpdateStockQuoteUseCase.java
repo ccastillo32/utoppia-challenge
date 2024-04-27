@@ -43,7 +43,7 @@ public class UpdateStockQuoteUseCase {
 	
 	private StockQuote getLatestPriceFromMarket(String stockSymbol) {
 		return getQuotesService.getLatestPricesByStockSymbol(stockSymbol)
-							   .orElseThrow(NoInformationFoundException::new);
+							   .orElseThrow(NoInformationFoundInMarketException::new);
 	}
 	
 	private Optional<StockQuote> getLatestPriceStoredToday(String stockSymbol) {
