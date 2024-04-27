@@ -8,8 +8,14 @@ public record GetAllStockQuotesQuery (
 		
 ) {
 	
+	private static final Integer DEFAULT_PAGE_SIZE = 20;
+	private static final Integer DEFAULT_PAGE_NUMBER = 0;
+	
 	public static GetAllStockQuotesQuery of(String stockSymbol, Integer pageNumber, Integer pageSize) {
-		return new GetAllStockQuotesQuery(stockSymbol, pageNumber, pageSize);
+		int size = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
+		int number = pageNumber == null ? DEFAULT_PAGE_NUMBER : pageNumber;
+		
+		return new GetAllStockQuotesQuery(stockSymbol, number, size);
 	}
 	
 }
