@@ -2,11 +2,16 @@ package co.com.tecso.utoppia.challenge.repositories;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import co.com.tecso.utoppia.challenge.domain.GetStoredQuotesService;
+import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 import co.com.tecso.utoppia.challenge.domain.StockQuoteSaver;
 
@@ -39,6 +44,42 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 					? Optional.of( entity.toStockQuote() )
 					: Optional.empty();
 		
+	}
+
+	@Override
+	public PagedList<StockQuote> getAll(int pageNumber, int pageLimit) {
+		
+		Pageable pageable = PageRequest.of(pageNumber, pageLimit);
+		
+		Page<StockQuoteJpaEntity> content = repository.findAll(pageable);
+		
+		return getPagedList(content);
+		
+	}
+
+	@Override
+	public PagedList<StockQuote> getBySymbol(String symbol, int pageNumber, int pageLimit) {
+		
+		Pageable pageable = PageRequest.of(pageNumber, pageLimit);
+		
+		Page<StockQuoteJpaEntity> content = repository.findBySymbol(symbol, pageable);
+		
+		return getPagedList(content);
+		
+	}
+	
+	private PagedList<StockQuote> getPagedList(Page<StockQuoteJpaEntity> content) {
+		List<StockQuote> elements = content.getContent()
+				.stream()
+				.map(StockQuoteJpaEntity::toStockQuote)
+				.toList();
+		
+		return new PagedList<>(elements, 
+				content.getTotalElements(), 
+				content.getTotalPages(), 
+				content.getPageable().getOffset(), 
+				content.getPageable().getPageSize()
+		);
 	}
 	
 }

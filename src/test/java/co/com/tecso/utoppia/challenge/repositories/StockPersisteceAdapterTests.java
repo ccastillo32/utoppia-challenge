@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import co.com.tecso.utoppia.challenge.application.data.StockQuoteData;
+import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 
 @DataJpaTest
@@ -58,5 +59,32 @@ final class StockPersisteceAdapterTests {
 		assertEquals(latestStoredData.get(), expectedResult);
 		
 	}
+	
+	@Test
+	void findAll() {
+		
+		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
+		
+		persisteceAdapter.save(firstQuery);
+		
+		PagedList<StockQuote> page = persisteceAdapter.getAll(0, 10);
+		
+		assertEquals(1, page.getTotalElements());
+		
+	}
+	
+	@Test
+	void findBySimbol() {
+		
+		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
+		
+		persisteceAdapter.save(firstQuery);
+		
+		PagedList<StockQuote> page = persisteceAdapter.getBySymbol(StockQuoteData.AAPL, 0, 10);
+		
+		assertEquals(1, page.getTotalElements());
+		
+	}
+	
 	
 }

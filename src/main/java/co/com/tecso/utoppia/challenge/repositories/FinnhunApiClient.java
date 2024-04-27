@@ -8,12 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import co.com.tecso.utoppia.challenge.domain.GetStockQuotesService;
+import co.com.tecso.utoppia.challenge.domain.GetQuotesService;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 
 @Service
 
-public class FinnhunApiClient implements GetStockQuotesService {
+public class FinnhunApiClient implements GetQuotesService {
 
 	@Value("${finnhub.api.endpoint}")
 	private String baseURL;
@@ -26,7 +26,7 @@ public class FinnhunApiClient implements GetStockQuotesService {
 	private final RestTemplate restTemplate = new RestTemplate();
 	
 	@Override
-	public Optional<StockQuote> getLatestPrices(String symbol) {
+	public Optional<StockQuote> getLatestPricesByStockSymbol(String symbol) {
 		
 		ResponseEntity<QuoteResponse> response = callAPI(symbol);
 		

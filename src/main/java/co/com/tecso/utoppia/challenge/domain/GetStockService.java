@@ -4,6 +4,6 @@ import java.util.Optional;
 
 public interface GetStockService {
 
-	Optional<Stock> getLatestStockData( String symbol );
+	Optional<StockQuote> getLatestStockData( String symbol );
 	
 }

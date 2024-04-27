@@ -3,20 +3,19 @@ package co.com.tecso.utoppia.challenge.application;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import co.com.tecso.utoppia.challenge.application.data.StockQuoteData;
-import co.com.tecso.utoppia.challenge.domain.GetStockQuotesService;
+import co.com.tecso.utoppia.challenge.domain.GetQuotesService;
 import co.com.tecso.utoppia.challenge.domain.GetStoredQuotesService;
 import co.com.tecso.utoppia.challenge.domain.StockQuoteSaver;
 
 final class UpdateStockQuoteUseCaseTests {
 
-	private GetStockQuotesService stockQuotesService = Mockito.mock(GetStockQuotesService.class);
+	private GetQuotesService stockQuotesService = Mockito.mock(GetQuotesService.class);
 	private GetStoredQuotesService storedQuotesService = Mockito.mock(GetStoredQuotesService.class);
 	private StockQuoteSaver stockQuoteSaver = Mockito.mock(StockQuoteSaver.class);
 	
@@ -28,7 +27,7 @@ final class UpdateStockQuoteUseCaseTests {
 	@Test
 	void shouldCreateANewRecord() {
 		
-		Mockito.when(stockQuotesService.getLatestPrices(AAPL))
+		Mockito.when(stockQuotesService.getLatestPricesByStockSymbol(AAPL))
 			   .thenReturn( Optional.of(StockQuoteData.firstQueryOfTheDay()) );
 		
 		Mockito.when( storedQuotesService.getLatestStoredQuoteByDate(AAPL, today()) )
@@ -45,7 +44,7 @@ final class UpdateStockQuoteUseCaseTests {
 	@Test
 	void shouldUpdateAnExistingRecord() {
 		
-		Mockito.when(stockQuotesService.getLatestPrices(AAPL))
+		Mockito.when(stockQuotesService.getLatestPricesByStockSymbol(AAPL))
 		   .thenReturn( Optional.of(StockQuoteData.secondQueryOfTheDay()) );
 	
 		Mockito.when( storedQuotesService.getLatestStoredQuoteByDate(AAPL, today()) )
@@ -62,7 +61,7 @@ final class UpdateStockQuoteUseCaseTests {
 	@Test
 	void checkUnknownSymbol() {
 		
-		Mockito.when(stockQuotesService.getLatestPrices(AAPL))
+		Mockito.when(stockQuotesService.getLatestPricesByStockSymbol(AAPL))
 		   .thenReturn( Optional.empty() );
 		
 		UpdateQuoteCommand command = UpdateQuoteCommand.of(AAPL);
@@ -74,8 +73,7 @@ final class UpdateStockQuoteUseCaseTests {
 	}
 	
 	private LocalDate today() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		return LocalDate.parse("2024-04-26", formatter);
+		return LocalDate.now();
 	}
 	
 	
