@@ -32,7 +32,8 @@ final class UpdateStockQuoteUseCaseTests {
 		Mockito.when( storedQuotesService.getLatestStoredQuoteByDate(AAPL, today()) )
 				.thenReturn( Optional.empty() );
 		
-		useCase.updateStockQuote(AAPL);
+		UpdateQuoteCommand command = UpdateQuoteCommand.of(AAPL);
+		useCase.updateStockQuote(command);
 		
 		Mockito.verify(stockQuoteSaver, Mockito.times(1))
 			   .save( StockQuoteData.firstQueryOfTheDay() );
@@ -48,7 +49,8 @@ final class UpdateStockQuoteUseCaseTests {
 		Mockito.when( storedQuotesService.getLatestStoredQuoteByDate(AAPL, today()) )
 			.thenReturn( Optional.of( StockQuoteData.firstQueryOfTheDay() ) );
 		
-		useCase.updateStockQuote(AAPL);
+		UpdateQuoteCommand command = UpdateQuoteCommand.of(AAPL);
+		useCase.updateStockQuote(command);
 		
 		Mockito.verify(stockQuoteSaver, Mockito.times(1))
 		   .save( StockQuoteData.latestStoredRecord() );
