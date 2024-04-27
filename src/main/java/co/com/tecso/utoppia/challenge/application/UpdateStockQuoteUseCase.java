@@ -55,20 +55,8 @@ public class UpdateStockQuoteUseCase {
 	}
 	
 	private void updateLatestStoredQuote(StockQuote oldInfo, StockQuote newInfo) {
-		StockQuote updatedRecord = StockQuote.of(
-				oldInfo.id(), 
-				oldInfo.symbol(), 
-				newInfo.currentPrice(), 
-				newInfo.change(),
-				newInfo.percentChange(), 
-				newInfo.highPrice(), 
-				newInfo.lowPrice(), 
-				newInfo.openPrice(), 
-				newInfo.previousClosePrice(), 
-				newInfo.updatedAt()
-		);
-		
-		stockQuoteSaver.save(updatedRecord);
+		StockQuote recordToUpdate = newInfo.replaceId(oldInfo.id()); 
+		stockQuoteSaver.save( recordToUpdate );
 	}
 	
 }

@@ -34,4 +34,9 @@ public record StockQuote (
 					openPrice, previousClosePrice, updatedAt);
 	}
 	
+	public StockQuote replaceId(String id) {
+		return new StockQuote(id, symbol, currentPrice, change, percentChange, highPrice, lowPrice,
+				openPrice, previousClosePrice, updatedAt);
+	}
+	
 }
