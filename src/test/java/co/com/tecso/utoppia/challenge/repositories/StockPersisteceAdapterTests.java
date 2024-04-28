@@ -25,36 +25,30 @@ final class StockPersisteceAdapterTests {
 	@Test
 	void shouldSaveAndGetTheFirstQueryMadeToday() {
 		
-		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
+		StockQuote firstRecord = StockQuoteData.firstQueryOfTheDay();
 		
-		persisteceAdapter.save(firstQuery);
+		saveToBD(firstRecord);
 		
-		LocalDate today = LocalDate.of(2024, 04, 26);
-		Optional<StockQuote> latestStoredData = persisteceAdapter.getLatestStoredQuoteByDate(StockQuoteData.AAPL, today);
+		Optional<StockQuote> lastRecordStored = getLastRecordSavedTodayForAAPL();
 		
-		Assertions.assertThat( latestStoredData ).isPresent();
-		assertEquals(latestStoredData.get(), firstQuery);
+		Assertions.assertThat( lastRecordStored ).isPresent();
+		assertEquals(lastRecordStored.get(), firstRecord);
 		
 	}
 	
 	@Test
 	void shouldRefreshTheLatestStoredData() {
 		
-		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
-		StockQuote expectedResult = StockQuoteData.lastRecordOfTheDay();
+		StockQuote firstRecord = StockQuoteData.firstQueryOfTheDay();
+		StockQuote secondRecord = StockQuoteData.lastRecordOfTheDay();
 		
-		assertDoesNotThrow(() -> {
-			
-			persisteceAdapter.save(firstQuery);
-			persisteceAdapter.save(expectedResult);
-			
-		});
+		saveToBD( firstRecord );
+		saveToBD( secondRecord );
 		
-		LocalDate today = LocalDate.of(2024, 04, 26);
-		Optional<StockQuote> latestStoredData = persisteceAdapter.getLatestStoredQuoteByDate(StockQuoteData.AAPL, today);
+		Optional<StockQuote> lastRecordStored = getLastRecordSavedTodayForAAPL();
 		
-		Assertions.assertThat( latestStoredData ).isPresent();
-		assertEquals(latestStoredData.get(), expectedResult);
+		Assertions.assertThat( lastRecordStored ).isPresent();
+		assertEquals(lastRecordStored.get(), secondRecord);
 		
 	}
 	
@@ -84,5 +78,13 @@ final class StockPersisteceAdapterTests {
 		
 	}
 	
+	private void saveToBD( StockQuote record ) {
+		persisteceAdapter.save( record );
+	}
+	
+	private Optional<StockQuote> getLastRecordSavedTodayForAAPL() {
+		LocalDate today = LocalDate.of(2024, 04, 26);
+		return persisteceAdapter.getLatestStoredQuoteByDate(StockQuoteData.AAPL, today);
+	}
 	
 }
