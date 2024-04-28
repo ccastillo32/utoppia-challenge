@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import co.com.tecso.utoppia.challenge.application.UpdateQuoteCommand;
 import co.com.tecso.utoppia.challenge.application.UpdateStockQuoteUseCase;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +32,9 @@ public class UpdateStockQuoteController {
 		@ApiResponse( responseCode = "400", description = "Validation errors")
 	})
 	
-	public ResponseEntity<Void> handleRequest(@RequestBody UpdateQuoteRequest request) {
+	public ResponseEntity<Void> handleRequest(
+			@Schema(description = "Stock symbol to be updated", implementation = UpdateQuoteRequest.class)
+			@RequestBody UpdateQuoteRequest request) {
 		
 		UpdateQuoteCommand command = request.toCommand();
 		
