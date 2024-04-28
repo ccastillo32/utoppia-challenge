@@ -1,11 +1,10 @@
 package co.com.tecso.utoppia.challenge.repositories;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
-import co.com.tecso.utoppia.challenge.util.EpochConverter;
+import co.com.tecso.utoppia.challenge.domain.StockQuoteBuilder;
 
 public record QuoteResponse (
 	
@@ -25,16 +24,22 @@ public record QuoteResponse (
 		return new QuoteResponse(c, d, dp, h, l, o, pc, t);
 	}
 	
-	public StockQuote toStockData(String symbol) {
-		return StockQuote.of(generateId(), symbol, c, dp, dp, h, l, o, pc, parseTime(t));
+	public StockQuote toStockQuote(String symbol) {
+		return new StockQuoteBuilder()
+					.id( generateId() )
+					.symbol(symbol)
+					.currentPrice(c)
+					.change(d)
+					.percentChange(dp)
+					.highPrice(h)
+					.lowPrice(l)
+					.openPrice(o)
+					.previousClosePrice(pc)
+					.build();
 	}
 	
 	private String generateId() {
 		return UUID.randomUUID().toString();
-	}
-	
-	private LocalDateTime parseTime(long epochTime) {
-		return EpochConverter.toLocalDateTime(epochTime);
 	}
 	
 	private QuoteResponse emptyResponse() {

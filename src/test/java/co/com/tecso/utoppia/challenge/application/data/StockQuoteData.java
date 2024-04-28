@@ -16,7 +16,7 @@ public class StockQuoteData {
 	public static StockQuote firstQueryOfTheDay() { // TODO: Refactor methods
 		String id = "75b1a0cb-43ee-4b89-99ac-20b340ba54bd";
 		BigDecimal currentPrice = new BigDecimal("169.365");
-		double change = -0.525;
+		BigDecimal change = new BigDecimal("-0.525");
 		double percentChange = -0.309;
 		BigDecimal highPrice = new BigDecimal("171.34");
 		BigDecimal lowPrice = new BigDecimal("169.19");
@@ -31,7 +31,7 @@ public class StockQuoteData {
 	public static StockQuote secondQueryOfTheDay() { // TODO: Refactor methods
 		String id = "1021e525-afe5-4543-aaf2-56a3d1c13434";
 		BigDecimal currentPrice = new BigDecimal("169.3");
-		double change = -0.59;
+		BigDecimal change = new BigDecimal("-0.59");
 		double percentChange = -0.3473;
 		BigDecimal highPrice = new BigDecimal("171.34");
 		BigDecimal lowPrice = new BigDecimal("169.19");
@@ -46,7 +46,7 @@ public class StockQuoteData {
 	public static StockQuote lastRecordOfTheDay() { // TODO: Refactor methods
 		String id = firstQueryOfTheDay().id();
 		BigDecimal currentPrice = secondQueryOfTheDay().currentPrice();
-		double change = secondQueryOfTheDay().change();
+		BigDecimal change = secondQueryOfTheDay().change();
 		double percentChange = secondQueryOfTheDay().percentChange();
 		BigDecimal highPrice = secondQueryOfTheDay().highPrice();
 		BigDecimal lowPrice = secondQueryOfTheDay().lowPrice();

@@ -56,7 +56,7 @@ public class FinnhunApiClient implements GetQuotesService {
 			return Optional.empty();
 		}
 		
-		return Optional.of( responseBody.toStockData(symbol) );
+		return Optional.of( responseBody.toStockQuote(symbol) );
 	}
 
 }

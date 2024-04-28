@@ -19,7 +19,7 @@ public class StockQuoteJpaEntity {
 	@Column(name = "current_price")
 	private BigDecimal currentPrice;
 	
-	private Double change;
+	private BigDecimal change;
 	
 	@Column(name = "percent_change")
 	private Double percentChange;
@@ -83,11 +83,11 @@ public class StockQuoteJpaEntity {
 		this.currentPrice = currentPrice;
 	}
 
-	public Double getChange() {
+	public BigDecimal getChange() {
 		return change;
 	}
 
-	public void setChange(Double change) {
+	public void setChange(BigDecimal change) {
 		this.change = change;
 	}
 
