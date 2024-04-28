@@ -20,7 +20,7 @@ java -jar target/utoppia-challenge-0.0.1-SNAPSHOT.jar
 
 ## URLs
 
-Once the application has been started, it can be accessed on the following URL:
+Once the application has been started, if everything is ok, the following URL should be working:
 
 ```sh
 http://localhost:8080/
@@ -30,9 +30,11 @@ The database console can be found here:
 
 ```sh
 http:localhost:8080/h2-console
+users: sa
+password: <empty>
 ```
 
-And for testing purposes, there's an interface with the available endpoints:
+And for testing purposes, there s an interface with 2 available endpoints:
 
 ```sh
 http://localhost:8080/swagger-ui/index.html
