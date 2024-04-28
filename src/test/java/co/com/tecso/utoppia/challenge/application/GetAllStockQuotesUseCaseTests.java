@@ -5,23 +5,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import co.com.tecso.utoppia.challenge.application.data.StockQuoteData;
+import co.com.tecso.utoppia.challenge.application.data.AAPLStockQuoteTestData;
 import co.com.tecso.utoppia.challenge.domain.GetStoredQuotesService;
 import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 
-final class GetAllStockQuotesServicetTests {
+final class GetAllStockQuotesUseCaseTests {
 
 	private GetStoredQuotesService getStoredQuotesService = Mockito.mock(GetStoredQuotesService.class);
-	private GetAllStockQuotesService useCase = new GetAllStockQuotesService(getStoredQuotesService);
+	private GetAllStockQuotesUseCase useCase = new GetAllStockQuotesUseCase(getStoredQuotesService);
 	
 	@Test
 	void findBySymbol() {
 		
-		Mockito.when( getStoredQuotesService.getBySymbol( StockQuoteData.AAPL, 0, 10))
-		       .thenReturn( StockQuoteData.pagedList() );
+		Mockito.when( getStoredQuotesService.getBySymbol( AAPLStockQuoteTestData.AAPL, 0, 10))
+		       .thenReturn( AAPLStockQuoteTestData.pagedList() );
 		
-		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(StockQuoteData.AAPL, 0, 10);
+		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(AAPLStockQuoteTestData.AAPL, 0, 10);
 		
 		PagedList<StockQuote> data = useCase.getAllStockQuotes(query);
 		

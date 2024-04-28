@@ -1,6 +1,5 @@
 package co.com.tecso.utoppia.challenge.repositories;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
@@ -11,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import co.com.tecso.utoppia.challenge.application.data.StockQuoteData;
+import co.com.tecso.utoppia.challenge.application.data.AAPLStockQuoteTestData;
 import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 
@@ -23,47 +22,61 @@ final class StockPersisteceAdapterTests {
 	private StockQuotePersisteceAdapter persisteceAdapter;
 	
 	@Test
-	void saveTodaysInfo() {
+	void shouldSaveAndGetTheFirstQueryMadeToday() {
 		
-		StockQuote dataToBePersisted = StockQuoteData.firstQueryOfTheDay();
+		StockQuote firstRecord = AAPLStockQuoteTestData.firstQueryOfTheDay();
 		
-		assertDoesNotThrow(() -> {
-			persisteceAdapter.save(dataToBePersisted);
-		});
+		saveToBD(firstRecord);
 		
-		LocalDate today = LocalDate.of(2024, 04, 26);
-		Optional<StockQuote> latestStoredData = persisteceAdapter.getLatestStoredQuoteByDate(StockQuoteData.AAPL, today);
+		Optional<StockQuote> lastRecordStored = getLastRecordSavedTodayForAAPL();
 		
-		Assertions.assertThat( latestStoredData ).isPresent();
-		assertEquals(latestStoredData.get(), dataToBePersisted);
+		Assertions.assertThat( lastRecordStored ).isPresent();
+		assertEquals(lastRecordStored.get(), firstRecord);
 		
 	}
 	
 	@Test
-	void updateTodaysInfo() {
+	void shouldRefreshTheLatestStoredData() {
 		
-		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
-		StockQuote expectedResult = StockQuoteData.lastRecordOfTheDay();
+		StockQuote firstRecord = AAPLStockQuoteTestData.firstQueryOfTheDay();
+		StockQuote secondRecord = AAPLStockQuoteTestData.lastRecordOfTheDay();
 		
-		assertDoesNotThrow(() -> {
-			
-			persisteceAdapter.save(firstQuery);
-			persisteceAdapter.save(expectedResult);
-			
-		});
+		saveToBD( firstRecord );
+		saveToBD( secondRecord );
 		
-		LocalDate today = LocalDate.of(2024, 04, 26);
-		Optional<StockQuote> latestStoredData = persisteceAdapter.getLatestStoredQuoteByDate(StockQuoteData.AAPL, today);
+		Optional<StockQuote> lastRecordStored = getLastRecordSavedTodayForAAPL();
 		
-		Assertions.assertThat( latestStoredData ).isPresent();
-		assertEquals(latestStoredData.get(), expectedResult);
+		Assertions.assertThat( lastRecordStored ).isPresent();
+		assertEquals(lastRecordStored.get(), secondRecord);
+		
+	}
+	
+	@Test
+	void queriesMadeYesterdayShouldRemain() {
+		
+		StockQuote yesterdayData = AAPLStockQuoteTestData.yesterdaysLastData();
+		
+		saveToBD(yesterdayData);
+		
+		StockQuote todaysEntry = AAPLStockQuoteTestData.firstQueryOfTheDay();
+		
+		saveToBD(todaysEntry);
+		
+		Optional<StockQuote> lastRecordStoredYesterday = getLastRecordSavedYesterdayForAAPL();
+		Optional<StockQuote> lastRecordStoredToday = getLastRecordSavedTodayForAAPL();
+		
+		Assertions.assertThat( lastRecordStoredYesterday ).isPresent();
+		Assertions.assertThat( lastRecordStoredToday ).isPresent();
+		
+		assertEquals(lastRecordStoredYesterday.get(), yesterdayData);
+		assertEquals(lastRecordStoredToday.get(), todaysEntry);
 		
 	}
 	
 	@Test
 	void findAll() {
 		
-		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
+		StockQuote firstQuery = AAPLStockQuoteTestData.firstQueryOfTheDay();
 		
 		persisteceAdapter.save(firstQuery);
 		
@@ -76,15 +89,28 @@ final class StockPersisteceAdapterTests {
 	@Test
 	void findBySimbol() {
 		
-		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
+		StockQuote firstQuery = AAPLStockQuoteTestData.firstQueryOfTheDay();
 		
 		persisteceAdapter.save(firstQuery);
 		
-		PagedList<StockQuote> page = persisteceAdapter.getBySymbol(StockQuoteData.AAPL, 0, 10);
+		PagedList<StockQuote> page = persisteceAdapter.getBySymbol(AAPLStockQuoteTestData.AAPL, 0, 10);
 		
 		assertEquals(1, page.getTotalElements());
 		
 	}
 	
+	private void saveToBD( StockQuote record ) {
+		persisteceAdapter.save( record );
+	}
+	
+	private Optional<StockQuote> getLastRecordSavedTodayForAAPL() {
+		LocalDate today = LocalDate.of(2024, 04, 26);
+		return persisteceAdapter.getLatestStoredQuoteByDate(AAPLStockQuoteTestData.AAPL, today);
+	}
+	
+	private Optional<StockQuote> getLastRecordSavedYesterdayForAAPL() {
+		LocalDate yesterday = LocalDate.of(2024, 04, 25);
+		return persisteceAdapter.getLatestStoredQuoteByDate(AAPLStockQuoteTestData.AAPL, yesterday);
+	}
 	
 }

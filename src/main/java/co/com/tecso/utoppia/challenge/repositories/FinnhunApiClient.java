@@ -1,6 +1,7 @@
 package co.com.tecso.utoppia.challenge.repositories;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,13 @@ public class FinnhunApiClient implements GetQuotesService {
 	@Override
 	public Optional<StockQuote> getLatestPricesByStockSymbol(String symbol) {
 		
-		ResponseEntity<QuoteResponse> response = callAPI(symbol);
+		ResponseEntity<FinnhubQuoteResponse> response = callAPI(symbol);
 		
 		if ( !(response.getStatusCode().equals(HttpStatus.OK))) {
 			return Optional.empty();
 		}
 		
-		QuoteResponse responseBody = response.getBody();
+		FinnhubQuoteResponse responseBody = response.getBody();
 		
 		return processResponse(responseBody, symbol);
 		
@@ -46,17 +47,21 @@ public class FinnhunApiClient implements GetQuotesService {
 						.replace("{token}", key);
 	}
 	
-	private ResponseEntity<QuoteResponse> callAPI(String symbol) {
+	private ResponseEntity<FinnhubQuoteResponse> callAPI(String symbol) {
 		String url = getQuoteURL(symbol);
-		return restTemplate.getForEntity(url, QuoteResponse.class);
+		return restTemplate.getForEntity(url, FinnhubQuoteResponse.class);
 	}
 	
-	private Optional<StockQuote> processResponse(QuoteResponse responseBody, String symbol) {
+	private Optional<StockQuote> processResponse(FinnhubQuoteResponse responseBody, String symbol) {
 		if (responseBody == null || responseBody.isEmpty()) {
 			return Optional.empty();
 		}
 		
-		return Optional.of( responseBody.toStockData(symbol) );
+		return Optional.of( responseBody.toStockQuote(generateId(), symbol) );
+	}
+	
+	private String generateId() {
+		return UUID.randomUUID().toString();
 	}
 
 }

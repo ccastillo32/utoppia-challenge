@@ -40,7 +40,7 @@ And for testing purposes, there s an interface with 2 available endpoints:
 http://localhost:8080/swagger-ui/index.html
 ```
 
-## Endpoints
+## Testing Endpoints
 
 ### Use case 1: 
 
@@ -124,5 +124,20 @@ Http Status: 200 OK
 ```
 
 If there are no results for the filtering values applied, you will receive a 200 OK response with an empty value on the "results" tag.
+
+## Unit testing
+
+* FinnhunApiClientTests: Connects to the Finnhub API and checks that we receive a response for APPL Symbol. We cannot assert the attributes received because they change every time.
+
+* FinnhubQuoteResponseTests: Transform the response received from the API, and give us the domain object (StockQuote) to use in our application.
+
+* StockPersistenceAdapterTests: Connects to the database and save/update corresponding records.
+
+* UpdateStockQuoteUseCaseTests: It tests the first use case (Refresh and update the database with the latest stock data from the Finnhub API)
+
+* GetAllStockQuotesUseCaseTests: It tests the second use case (Retrieve and display stored stock data from a database to the user)
+
+* UpdateStockQuoteControllerTests: It tests one REST controller (Tests methods for the second controller were not added).
+
 
 

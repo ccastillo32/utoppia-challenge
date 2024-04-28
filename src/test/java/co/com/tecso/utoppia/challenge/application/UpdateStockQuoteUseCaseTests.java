@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import co.com.tecso.utoppia.challenge.application.data.StockQuoteData;
+import co.com.tecso.utoppia.challenge.application.data.AAPLStockQuoteTestData;
 import co.com.tecso.utoppia.challenge.domain.GetQuotesService;
 import co.com.tecso.utoppia.challenge.domain.GetStoredQuotesService;
 import co.com.tecso.utoppia.challenge.domain.StockQuoteSaver;
@@ -28,7 +28,7 @@ final class UpdateStockQuoteUseCaseTests {
 	void shouldCreateANewRecord() {
 		
 		Mockito.when(stockQuotesService.getLatestPricesByStockSymbol(AAPL))
-			   .thenReturn( Optional.of(StockQuoteData.firstQueryOfTheDay()) );
+			   .thenReturn( Optional.of(AAPLStockQuoteTestData.firstQueryOfTheDay()) );
 		
 		Mockito.when( storedQuotesService.getLatestStoredQuoteByDate(AAPL, today()) )
 				.thenReturn( Optional.empty() );
@@ -37,7 +37,7 @@ final class UpdateStockQuoteUseCaseTests {
 		useCase.updateStockQuote(command);
 		
 		Mockito.verify(stockQuoteSaver, Mockito.times(1))
-			   .save( StockQuoteData.firstQueryOfTheDay() );
+			   .save( AAPLStockQuoteTestData.firstQueryOfTheDay() );
 		
 	}
 	
@@ -45,16 +45,16 @@ final class UpdateStockQuoteUseCaseTests {
 	void shouldUpdateAnExistingRecord() {
 		
 		Mockito.when(stockQuotesService.getLatestPricesByStockSymbol(AAPL))
-		   .thenReturn( Optional.of(StockQuoteData.secondQueryOfTheDay()) );
+		   .thenReturn( Optional.of(AAPLStockQuoteTestData.secondQueryOfTheDay()) );
 	
 		Mockito.when( storedQuotesService.getLatestStoredQuoteByDate(AAPL, today()) )
-			.thenReturn( Optional.of( StockQuoteData.firstQueryOfTheDay() ) );
+			.thenReturn( Optional.of( AAPLStockQuoteTestData.firstQueryOfTheDay() ) );
 		
 		UpdateQuoteCommand command = UpdateQuoteCommand.of(AAPL);
 		useCase.updateStockQuote(command);
 		
 		Mockito.verify(stockQuoteSaver, Mockito.times(1))
-		   .save( StockQuoteData.lastRecordOfTheDay() );
+		   .save( AAPLStockQuoteTestData.lastRecordOfTheDay() );
 		
 	}
 	
