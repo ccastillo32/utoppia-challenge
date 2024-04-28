@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.com.tecso.utoppia.challenge.application.GetAllStockQuotesQuery;
-import co.com.tecso.utoppia.challenge.application.GetAllStockQuotesService;
+import co.com.tecso.utoppia.challenge.application.GetAllStockQuotesUseCase;
 import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,9 +21,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 public class GetAllStockQuotesController {
 
-	private GetAllStockQuotesService useCase;
+	private GetAllStockQuotesUseCase useCase;
 	
-	public GetAllStockQuotesController(GetAllStockQuotesService useCase) {
+	public GetAllStockQuotesController(GetAllStockQuotesUseCase useCase) {
 		this.useCase = useCase;
 	}
 	

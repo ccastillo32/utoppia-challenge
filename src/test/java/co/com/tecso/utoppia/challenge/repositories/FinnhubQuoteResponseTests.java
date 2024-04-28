@@ -11,7 +11,7 @@ import co.com.tecso.utoppia.challenge.domain.StockQuote;
 final class FinnhubQuoteResponseTests {
 
 	@Test
-	void shouldBuildObject() {
+	void shouldBuildDomainObjectFromTheAPIResponse() {
 		
 		FinnhubQuoteResponse response = AAPLFinnhubQuoteResponseData.firstQueryOfTheDay();
 		

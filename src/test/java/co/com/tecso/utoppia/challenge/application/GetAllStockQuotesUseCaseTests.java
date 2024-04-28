@@ -10,10 +10,10 @@ import co.com.tecso.utoppia.challenge.domain.GetStoredQuotesService;
 import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 
-final class GetAllStockQuotesServicetTests {
+final class GetAllStockQuotesUseCaseTests {
 
 	private GetStoredQuotesService getStoredQuotesService = Mockito.mock(GetStoredQuotesService.class);
-	private GetAllStockQuotesService useCase = new GetAllStockQuotesService(getStoredQuotesService);
+	private GetAllStockQuotesUseCase useCase = new GetAllStockQuotesUseCase(getStoredQuotesService);
 	
 	@Test
 	void findBySymbol() {

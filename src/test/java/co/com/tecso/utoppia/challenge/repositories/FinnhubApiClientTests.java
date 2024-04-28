@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import co.com.tecso.utoppia.challenge.application.data.AAPLStockQuoteTestData;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 
 @SpringBootTest
@@ -19,7 +20,7 @@ final class FinnhubApiClientTests {
 	@Test
 	void success() {
 		
-		Optional<StockQuote> result = quote("AAPL");
+		Optional<StockQuote> result = quote( AAPLStockQuoteTestData.AAPL );
 		Assertions.assertThat(result).isNotEmpty();
 		
 	}

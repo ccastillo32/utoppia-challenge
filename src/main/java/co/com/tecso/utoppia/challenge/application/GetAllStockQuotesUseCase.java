@@ -7,11 +7,11 @@ import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 
 @Service
-public class GetAllStockQuotesService {
+public class GetAllStockQuotesUseCase {
 
 	private GetStoredQuotesService getStoredQuotesService;
 	
-	public GetAllStockQuotesService(GetStoredQuotesService getStoredQuotesService) {
+	public GetAllStockQuotesUseCase(GetStoredQuotesService getStoredQuotesService) {
 		this.getStoredQuotesService = getStoredQuotesService;
 	}
 	
