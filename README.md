@@ -1,6 +1,3 @@
-## Technical considerations
-
-
 ## Installation
 
 ### Required software:
@@ -63,7 +60,7 @@ Request body:
 204. No content
 ```
 
-Just in case the user inputs an unknown stock symbol, an error messge should be shown:
+Just in case the user inputs an unknown stock symbol, an error message should be shown:
 
 ```
 {
@@ -124,6 +121,6 @@ Http Status: 200 OK
 }
 ```
 
-If there are no results, you will receive a 200 OK response with an empty value on the "results" tag.
+If there are no results for the filtering values applied, you will receive a 200 OK response with an empty value on the "results" tag.
 
 
