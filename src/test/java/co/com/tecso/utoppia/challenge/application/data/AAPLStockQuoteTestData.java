@@ -9,7 +9,7 @@ import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 import co.com.tecso.utoppia.challenge.domain.StockQuoteBuilder;
 
-public class StockQuoteData {
+public class AAPLStockQuoteTestData {
 	
 	public static final String AAPL = "AAPL";
 

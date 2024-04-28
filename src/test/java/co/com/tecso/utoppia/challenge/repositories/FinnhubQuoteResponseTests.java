@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import co.com.tecso.utoppia.challenge.application.data.AAPLFinnhubQuoteResponseData;
-import co.com.tecso.utoppia.challenge.application.data.StockQuoteData;
+import co.com.tecso.utoppia.challenge.application.data.AAPLStockQuoteTestData;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 
 final class FinnhubQuoteResponseTests {
@@ -15,10 +15,10 @@ final class FinnhubQuoteResponseTests {
 		
 		FinnhubQuoteResponse response = AAPLFinnhubQuoteResponseData.firstQueryOfTheDay();
 		
-		String id = StockQuoteData.firstQueryOfTheDay().id();
-		StockQuote domain = response.toStockQuote( id, StockQuoteData.AAPL );
+		String id = AAPLStockQuoteTestData.firstQueryOfTheDay().id();
+		StockQuote domain = response.toStockQuote( id, AAPLStockQuoteTestData.AAPL );
 		
-		StockQuote expected = StockQuoteData.firstQueryOfTheDay();
+		StockQuote expected = AAPLStockQuoteTestData.firstQueryOfTheDay();
 		
 		assertEquals(expected.currentPrice(), domain.currentPrice());
 		assertEquals(expected.change(), domain.change());

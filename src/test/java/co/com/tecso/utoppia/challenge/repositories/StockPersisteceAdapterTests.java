@@ -1,6 +1,5 @@
 package co.com.tecso.utoppia.challenge.repositories;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
@@ -11,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import co.com.tecso.utoppia.challenge.application.data.StockQuoteData;
+import co.com.tecso.utoppia.challenge.application.data.AAPLStockQuoteTestData;
 import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
 
@@ -25,7 +24,7 @@ final class StockPersisteceAdapterTests {
 	@Test
 	void shouldSaveAndGetTheFirstQueryMadeToday() {
 		
-		StockQuote firstRecord = StockQuoteData.firstQueryOfTheDay();
+		StockQuote firstRecord = AAPLStockQuoteTestData.firstQueryOfTheDay();
 		
 		saveToBD(firstRecord);
 		
@@ -39,8 +38,8 @@ final class StockPersisteceAdapterTests {
 	@Test
 	void shouldRefreshTheLatestStoredData() {
 		
-		StockQuote firstRecord = StockQuoteData.firstQueryOfTheDay();
-		StockQuote secondRecord = StockQuoteData.lastRecordOfTheDay();
+		StockQuote firstRecord = AAPLStockQuoteTestData.firstQueryOfTheDay();
+		StockQuote secondRecord = AAPLStockQuoteTestData.lastRecordOfTheDay();
 		
 		saveToBD( firstRecord );
 		saveToBD( secondRecord );
@@ -55,7 +54,7 @@ final class StockPersisteceAdapterTests {
 	@Test
 	void findAll() {
 		
-		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
+		StockQuote firstQuery = AAPLStockQuoteTestData.firstQueryOfTheDay();
 		
 		persisteceAdapter.save(firstQuery);
 		
@@ -68,11 +67,11 @@ final class StockPersisteceAdapterTests {
 	@Test
 	void findBySimbol() {
 		
-		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
+		StockQuote firstQuery = AAPLStockQuoteTestData.firstQueryOfTheDay();
 		
 		persisteceAdapter.save(firstQuery);
 		
-		PagedList<StockQuote> page = persisteceAdapter.getBySymbol(StockQuoteData.AAPL, 0, 10);
+		PagedList<StockQuote> page = persisteceAdapter.getBySymbol(AAPLStockQuoteTestData.AAPL, 0, 10);
 		
 		assertEquals(1, page.getTotalElements());
 		
@@ -84,7 +83,7 @@ final class StockPersisteceAdapterTests {
 	
 	private Optional<StockQuote> getLastRecordSavedTodayForAAPL() {
 		LocalDate today = LocalDate.of(2024, 04, 26);
-		return persisteceAdapter.getLatestStoredQuoteByDate(StockQuoteData.AAPL, today);
+		return persisteceAdapter.getLatestStoredQuoteByDate(AAPLStockQuoteTestData.AAPL, today);
 	}
 	
 }
