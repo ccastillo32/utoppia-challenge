@@ -23,24 +23,22 @@ final class StockPersisteceAdapterTests {
 	private StockQuotePersisteceAdapter persisteceAdapter;
 	
 	@Test
-	void saveTodaysInfo() {
+	void shouldSaveAndGetTheFirstQueryMadeToday() {
 		
-		StockQuote dataToBePersisted = StockQuoteData.firstQueryOfTheDay();
+		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
 		
-		assertDoesNotThrow(() -> {
-			persisteceAdapter.save(dataToBePersisted);
-		});
+		persisteceAdapter.save(firstQuery);
 		
 		LocalDate today = LocalDate.of(2024, 04, 26);
 		Optional<StockQuote> latestStoredData = persisteceAdapter.getLatestStoredQuoteByDate(StockQuoteData.AAPL, today);
 		
 		Assertions.assertThat( latestStoredData ).isPresent();
-		assertEquals(latestStoredData.get(), dataToBePersisted);
+		assertEquals(latestStoredData.get(), firstQuery);
 		
 	}
 	
 	@Test
-	void updateTodaysInfo() {
+	void shouldRefreshTheLatestStoredData() {
 		
 		StockQuote firstQuery = StockQuoteData.firstQueryOfTheDay();
 		StockQuote expectedResult = StockQuoteData.lastRecordOfTheDay();

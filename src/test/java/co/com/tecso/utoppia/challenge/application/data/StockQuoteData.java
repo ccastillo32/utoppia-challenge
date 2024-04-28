@@ -7,43 +7,30 @@ import java.util.List;
 
 import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
-import co.com.tecso.utoppia.challenge.util.EpochConverter;
+import co.com.tecso.utoppia.challenge.domain.StockQuoteBuilder;
 
 public class StockQuoteData {
 	
 	public static final String AAPL = "AAPL";
 
-	public static StockQuote firstQueryOfTheDay() { // TODO: Refactor methods
+	public static StockQuote firstQueryOfTheDay() {
 		String id = "75b1a0cb-43ee-4b89-99ac-20b340ba54bd";
-		BigDecimal currentPrice = new BigDecimal("169.365");
-		BigDecimal change = new BigDecimal("-0.525");
-		double percentChange = -0.309;
-		BigDecimal highPrice = new BigDecimal("171.34");
-		BigDecimal lowPrice = new BigDecimal("169.19");
-		BigDecimal openPrice = new BigDecimal("169.87");
-		BigDecimal previousClosePrice = new BigDecimal("169.89");
-		LocalDateTime updatedAt = EpochConverter.toLocalDateTime(1714161559); // 26/04/2024 at 19:59:19
 		
-		return StockQuote.of(id, AAPL, currentPrice, change, percentChange, highPrice, 
-				lowPrice, openPrice, previousClosePrice, updatedAt);
+		return AAPLFinnhubQuoteResponseData
+				.firstQueryOfTheDay()
+				.toStockQuote(id, AAPL);
 	}
 	
-	public static StockQuote secondQueryOfTheDay() { // TODO: Refactor methods
+	public static StockQuote secondQueryOfTheDay() {
 		String id = "1021e525-afe5-4543-aaf2-56a3d1c13434";
-		BigDecimal currentPrice = new BigDecimal("169.3");
-		BigDecimal change = new BigDecimal("-0.59");
-		double percentChange = -0.3473;
-		BigDecimal highPrice = new BigDecimal("171.34");
-		BigDecimal lowPrice = new BigDecimal("169.19");
-		BigDecimal openPrice = new BigDecimal("169.87");
-		BigDecimal previousClosePrice = new BigDecimal("169.89");
-		LocalDateTime updatedAt = EpochConverter.toLocalDateTime(1714161601); // 26/04/2024 at 20:00:01
 		
-		return StockQuote.of(id, AAPL, currentPrice, change, percentChange, highPrice, 
-				lowPrice, openPrice, previousClosePrice, updatedAt);
+		return AAPLFinnhubQuoteResponseData
+				.secondQueryOfTheDay()
+				.toStockQuote(id, AAPL);
 	}
 	
-	public static StockQuote lastRecordOfTheDay() { // TODO: Refactor methods
+	public static StockQuote lastRecordOfTheDay() {
+		
 		String id = firstQueryOfTheDay().id();
 		BigDecimal currentPrice = secondQueryOfTheDay().currentPrice();
 		BigDecimal change = secondQueryOfTheDay().change();
@@ -52,10 +39,21 @@ public class StockQuoteData {
 		BigDecimal lowPrice = secondQueryOfTheDay().lowPrice();
 		BigDecimal openPrice = secondQueryOfTheDay().openPrice();
 		BigDecimal previousClosePrice = secondQueryOfTheDay().previousClosePrice();
-		LocalDateTime updatedAt = secondQueryOfTheDay().updatedAt(); // 26/04/2024 at 19:59:19
+		LocalDateTime updatedAt = secondQueryOfTheDay().updatedAt();
 		
-		return StockQuote.of(id, AAPL, currentPrice, change, percentChange, highPrice, 
-				lowPrice, openPrice, previousClosePrice, updatedAt);
+		return new StockQuoteBuilder()
+					.id(id)
+					.symbol(AAPL)
+					.currentPrice(currentPrice)
+					.change(change)
+					.percentChange(percentChange)
+					.highPrice(highPrice)
+					.lowPrice(lowPrice)
+					.openPrice(openPrice)
+					.previousClosePrice(previousClosePrice)
+					.updatedAt(updatedAt)
+					.build();
+		
 	}
 	
 	public static PagedList<StockQuote> pagedList() {
