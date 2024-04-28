@@ -47,6 +47,8 @@ http://localhost:8080/swagger-ui/index.html
 
 Refresh and update the database with the latest stock data from the Finnhub API
 
+#### Request:
+
 ```
 POST /api/stock-quotes/update
 
@@ -55,7 +57,7 @@ Request body:
 
 ```
 
-Expected result:
+#### Response:
 
 ```
 204. No content
@@ -98,6 +100,8 @@ None of the parameters are required. If none of them are indicated, the applicat
 #### Response:
 
 ```
+Http Status: 200 OK
+
 {
     "results": [
         {
@@ -120,6 +124,6 @@ None of the parameters are required. If none of them are indicated, the applicat
 }
 ```
 
-
+If there are no results, you will receive a 200 OK response with an empty value on the "results" tag.
 
 
