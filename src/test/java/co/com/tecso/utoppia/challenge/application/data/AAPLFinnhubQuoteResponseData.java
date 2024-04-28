@@ -36,4 +36,19 @@ public class AAPLFinnhubQuoteResponseData {
 		
 	}
 	
+	public static FinnhubQuoteResponse yesterdaysLastEntry() {
+		
+		BigDecimal currentPrice = new BigDecimal("406.32");
+		BigDecimal change = new BigDecimal("7.28");
+		double percentChange = 1.8244;
+		BigDecimal highPrice = new BigDecimal("413");
+		BigDecimal lowPrice = new BigDecimal("405.7601");
+		BigDecimal openPrice = new BigDecimal("412.41");
+		BigDecimal previousClosePrice = new BigDecimal("399.04");
+		long time = 1714076250;
+		
+		return new FinnhubQuoteResponse(currentPrice, change, percentChange, highPrice, lowPrice, openPrice, previousClosePrice, time);	
+		
+	}
+	
 }

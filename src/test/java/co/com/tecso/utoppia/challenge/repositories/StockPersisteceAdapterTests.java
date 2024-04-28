@@ -52,6 +52,28 @@ final class StockPersisteceAdapterTests {
 	}
 	
 	@Test
+	void queriesMadeYesterdayShouldRemain() {
+		
+		StockQuote yesterdayData = AAPLStockQuoteTestData.yesterdaysLastData();
+		
+		saveToBD(yesterdayData);
+		
+		StockQuote todaysEntry = AAPLStockQuoteTestData.firstQueryOfTheDay();
+		
+		saveToBD(todaysEntry);
+		
+		Optional<StockQuote> lastRecordStoredYesterday = getLastRecordSavedYesterdayForAAPL();
+		Optional<StockQuote> lastRecordStoredToday = getLastRecordSavedTodayForAAPL();
+		
+		Assertions.assertThat( lastRecordStoredYesterday ).isPresent();
+		Assertions.assertThat( lastRecordStoredToday ).isPresent();
+		
+		assertEquals(lastRecordStoredYesterday.get(), yesterdayData);
+		assertEquals(lastRecordStoredToday.get(), todaysEntry);
+		
+	}
+	
+	@Test
 	void findAll() {
 		
 		StockQuote firstQuery = AAPLStockQuoteTestData.firstQueryOfTheDay();
@@ -84,6 +106,11 @@ final class StockPersisteceAdapterTests {
 	private Optional<StockQuote> getLastRecordSavedTodayForAAPL() {
 		LocalDate today = LocalDate.of(2024, 04, 26);
 		return persisteceAdapter.getLatestStoredQuoteByDate(AAPLStockQuoteTestData.AAPL, today);
+	}
+	
+	private Optional<StockQuote> getLastRecordSavedYesterdayForAAPL() {
+		LocalDate yesterday = LocalDate.of(2024, 04, 25);
+		return persisteceAdapter.getLatestStoredQuoteByDate(AAPLStockQuoteTestData.AAPL, yesterday);
 	}
 	
 }

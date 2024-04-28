@@ -29,6 +29,14 @@ public class AAPLStockQuoteTestData {
 				.toStockQuote(id, AAPL);
 	}
 	
+	public static StockQuote yesterdaysLastData() {
+		String id = "b907ffb9-9cb1-4c40-80b0-065b02143f00";
+		
+		return AAPLFinnhubQuoteResponseData
+				.yesterdaysLastEntry()
+				.toStockQuote(id, AAPL);
+	}
+	
 	public static StockQuote lastRecordOfTheDay() {
 		
 		String id = firstQueryOfTheDay().id();
