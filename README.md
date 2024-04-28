@@ -127,17 +127,17 @@ If there are no results for the filtering values applied, you will receive a 200
 
 ## Unit testing
 
-** FinnhunApiClientTests: ** Connects to the Finnhub API and checks that we receive a response for APPL Symbol. We cannot assert the attributes because they change every time.
+* FinnhunApiClientTests: Connects to the Finnhub API and checks that we receive a response for APPL Symbol. We cannot assert the attributes received because they change every time.
 
-** FinnhubQuoteResponseTests: ** Transform the response received from the API, and give us the domain object (StockQuote) to use in our application.
+* FinnhubQuoteResponseTests: Transform the response received from the API, and give us the domain object (StockQuote) to use in our application.
 
-** StockPersistenceAdapterTests: ** Connects to the database and save/update corresponding records.
+* StockPersistenceAdapterTests: Connects to the database and save/update corresponding records.
 
-** UpdateStockQuoteUseCaseTests: ** Tests the first use case (Refresh and update the database with the latest stock data from the Finnhub API)
+* UpdateStockQuoteUseCaseTests: It tests the first use case (Refresh and update the database with the latest stock data from the Finnhub API)
 
-** GetAllStockQuotesUseCaseTests: ** Tests the second use case (Retrieve and display stored stock data from a database to the user)
+* GetAllStockQuotesUseCaseTests: It tests the second use case (Retrieve and display stored stock data from a database to the user)
 
-** UpdateStockQuoteControllerTests: ** Tests one controller (Tests methods for the second controller were not added).
+* UpdateStockQuoteControllerTests: It tests one REST controller (Tests methods for the second controller were not added).
 
 
 
