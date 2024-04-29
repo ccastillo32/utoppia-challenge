@@ -83,6 +83,17 @@ Becase the symbol is required, an error message should be shown in case the user
 }
 ```
 
+In case that the Finnhub key API is not provided, a message like this should be shown:
+
+```
+Status: 500 (Internal server error)
+
+{
+    "message": "Service unavailable. Please try again later"
+}
+```
+
+
 ### Use case 2: 
 
 Retrieve and display stored stock data from a database to the user.

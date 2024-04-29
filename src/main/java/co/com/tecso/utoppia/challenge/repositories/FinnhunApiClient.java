@@ -29,6 +29,8 @@ public class FinnhunApiClient implements GetQuotesService {
 	@Override
 	public Optional<StockQuote> getLatestPricesByStockSymbol(String symbol) {
 		
+		requireTokenToContinue();
+		
 		ResponseEntity<FinnhubQuoteResponse> response = callAPI(symbol);
 		
 		if ( !(response.getStatusCode().equals(HttpStatus.OK))) {
@@ -62,6 +64,12 @@ public class FinnhunApiClient implements GetQuotesService {
 	
 	private String generateId() {
 		return UUID.randomUUID().toString();
+	}
+	
+	private void requireTokenToContinue() {
+		if (key == null || key.isBlank()) {
+			throw new NoTokenProvidedException();
+		}
 	}
 
 }
