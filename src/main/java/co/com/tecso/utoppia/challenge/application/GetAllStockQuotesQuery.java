@@ -18,4 +18,8 @@ public record GetAllStockQuotesQuery (
 		return new GetAllStockQuotesQuery(stockSymbol, number, size);
 	}
 	
+	public boolean hasParameters() {
+		return (stockSymbol != null && !stockSymbol.isBlank());
+	}
+	
 }

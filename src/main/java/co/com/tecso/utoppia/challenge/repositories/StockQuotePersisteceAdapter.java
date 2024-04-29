@@ -8,8 +8,10 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import co.com.tecso.utoppia.challenge.application.GetAllStockQuotesQuery;
 import co.com.tecso.utoppia.challenge.domain.GetStoredQuotesService;
 import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
@@ -47,17 +49,15 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 	}
 
 	@Override
-	public PagedList<StockQuote> getAll(String symbol, int pageNumber, int pageLimit) {
+	public PagedList<StockQuote> getAll(GetAllStockQuotesQuery query) {
 		
-		Pageable pageable = PageRequest.of(pageNumber, pageLimit);
+		Pageable pageable = PageRequest.of(query.pageNumber(), query.pageSize());
 		
-		if (symbol != null && !symbol.isBlank()) {
-			Page<StockQuoteJpaEntity> content = repository.findAll( StockQuoteSpecs.bySymbolEqual(symbol), pageable );
-			return getPagedList(content);
-		} else {
-			Page<StockQuoteJpaEntity> content = repository.findAll( pageable );
-			return getPagedList(content);
-		}
+		Page<StockQuoteJpaEntity> content = query.hasParameters()
+				? repository.findAll( getSpecification(query), pageable )
+				: repository.findAll(pageable);
+		
+		return getPagedList(content);
 		
 	}
 	
@@ -73,6 +73,10 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 				content.getPageable().getOffset(), 
 				content.getPageable().getPageSize()
 		);
+	}
+	
+	private Specification<StockQuoteJpaEntity> getSpecification(GetAllStockQuotesQuery query) {
+		return StockQuoteSpecs.bySymbolEqual( query.stockSymbol() );
 	}
 	
 }

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import co.com.tecso.utoppia.challenge.application.GetAllStockQuotesQuery;
 import co.com.tecso.utoppia.challenge.application.data.AAPLStockQuoteTestData;
 import co.com.tecso.utoppia.challenge.domain.PagedList;
 import co.com.tecso.utoppia.challenge.domain.StockQuote;
@@ -80,7 +81,9 @@ final class StockPersisteceAdapterTests {
 		
 		persisteceAdapter.save(firstQuery);
 		
-		PagedList<StockQuote> page = persisteceAdapter.getAll(null, 0, 10);
+		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(null, 0, 10);
+		
+		PagedList<StockQuote> page = persisteceAdapter.getAll(query);
 		
 		assertEquals(1, page.getTotalElements());
 		
@@ -93,7 +96,9 @@ final class StockPersisteceAdapterTests {
 		
 		persisteceAdapter.save(firstQuery);
 		
-		PagedList<StockQuote> page = persisteceAdapter.getAll(AAPLStockQuoteTestData.AAPL, 0, 10);
+		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(AAPLStockQuoteTestData.AAPL, 0, 10);
+		
+		PagedList<StockQuote> page = persisteceAdapter.getAll(query);
 		
 		assertEquals(1, page.getTotalElements());
 		

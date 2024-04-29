@@ -17,8 +17,7 @@ public class GetAllStockQuotesUseCase {
 	
 	public PagedList<StockQuote> getAllStockQuotes(GetAllStockQuotesQuery query) {
 		
-		String stockSymbol = query.stockSymbol();
-		return getStoredQuotesService.getAll(stockSymbol, query.pageNumber(), query.pageSize());
+		return getStoredQuotesService.getAll(query);
 		
 	}
 	
