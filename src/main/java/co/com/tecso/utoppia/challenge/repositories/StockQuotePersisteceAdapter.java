@@ -61,8 +61,10 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 		
 		Pageable pageable = PageRequest.of(query.pageNumber(), query.pageSize());
 		
-		Page<StockQuoteJpaEntity> content = query.hasParameters()
-				? repository.findAll( getSpecification(query), pageable )
+		Specification<StockQuoteJpaEntity> spec = getSpecification(query);
+		
+		Page<StockQuoteJpaEntity> content = spec != null 
+				? repository.findAll( spec, pageable )
 				: repository.findAll(pageable);
 		
 		return getPagedList(content);
@@ -84,7 +86,25 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 	}
 	
 	private Specification<StockQuoteJpaEntity> getSpecification(GetAllStockQuotesQuery query) {
-		return StockQuoteSpecs.bySymbolEqual( query.stockSymbol() );
+		Specification<StockQuoteJpaEntity> spec = null;
+		
+		if (query.stockSymbol() != null && !query.stockSymbol().isBlank()) {
+			spec = StockQuoteSpecs.bySymbolEqual( query.stockSymbol() );
+		}
+		
+		if (query.startDate() != null) {
+			spec = spec != null 
+						? spec.and( StockQuoteSpecs.byStartDate(query.startDate().atStartOfDay()))
+						: StockQuoteSpecs.byStartDate(query.startDate().atStartOfDay());
+		}
+		
+		if (query.endDate() != null) {
+			spec = spec != null 
+						? spec.and( StockQuoteSpecs.byEndDate(query.endDate().atTime(23, 59, 59)))
+						: StockQuoteSpecs.byEndDate(query.endDate().atTime(23, 59, 59));
+		}
+		
+		return spec;
 	}
 	
 }

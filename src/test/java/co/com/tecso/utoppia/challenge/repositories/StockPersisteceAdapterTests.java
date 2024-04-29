@@ -81,7 +81,7 @@ final class StockPersisteceAdapterTests {
 		
 		persisteceAdapter.save(firstQuery);
 		
-		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(null, 0, 10);
+		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(null, 0, 10, null, null);
 		
 		PagedList<StockQuote> page = persisteceAdapter.getAll(query);
 		
@@ -96,7 +96,7 @@ final class StockPersisteceAdapterTests {
 		
 		persisteceAdapter.save(firstQuery);
 		
-		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(AAPLStockQuoteTestData.AAPL, 0, 10);
+		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(AAPLStockQuoteTestData.AAPL, 0, 10, null, null);
 		
 		PagedList<StockQuote> page = persisteceAdapter.getAll(query);
 		

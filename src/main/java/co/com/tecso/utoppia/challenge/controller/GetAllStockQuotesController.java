@@ -1,5 +1,7 @@
 package co.com.tecso.utoppia.challenge.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,14 +43,31 @@ public class GetAllStockQuotesController {
 			@RequestParam(required = false) Integer pageNumber,
 			
 			@Parameter(description = "Total records per page")
-			@RequestParam(required = false) Integer pageSize) {
+			@RequestParam(required = false) Integer pageSize,
+			
+			@Parameter(description = "Start date")
+			@RequestParam(required = false) String startDate,
+			
+			@Parameter(description = "End date")
+			@RequestParam(required = false) String endDate) {
 		
-		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(symbol, pageNumber, pageSize);
+		LocalDate start = toDate(startDate);
+		LocalDate end = toDate(endDate);
+		
+		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(symbol, pageNumber, pageSize, start, end);
 		
 		PagedList<StockQuote> pageResults = useCase.getAllStockQuotes(query);
 		
 		return ResponseEntity.ok(pageResults);
 		
+	}
+	
+	private LocalDate toDate(String value) {
+		if (value == null) {
+			return null;
+		}
+		
+		return LocalDate.parse(value);
 	}
 	
 }
