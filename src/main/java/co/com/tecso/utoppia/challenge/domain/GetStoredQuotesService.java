@@ -7,8 +7,6 @@ public interface GetStoredQuotesService {
 
 	Optional<StockQuote> getLatestStoredQuoteByDate(String stockSymbol, LocalDate localDate);
 	
-	PagedList<StockQuote> getAll(int pageNumber, int pageLimit);
-	
-	PagedList<StockQuote> getBySymbol(String symbol, int pageNumber, int pageLimit);
+	PagedList<StockQuote> getAll(String symbol, int pageNumber, int pageLimit);
 	
 }

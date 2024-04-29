@@ -47,24 +47,17 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 	}
 
 	@Override
-	public PagedList<StockQuote> getAll(int pageNumber, int pageLimit) {
+	public PagedList<StockQuote> getAll(String symbol, int pageNumber, int pageLimit) {
 		
 		Pageable pageable = PageRequest.of(pageNumber, pageLimit);
 		
-		Page<StockQuoteJpaEntity> content = repository.findAll(pageable);
-		
-		return getPagedList(content);
-		
-	}
-
-	@Override
-	public PagedList<StockQuote> getBySymbol(String symbol, int pageNumber, int pageLimit) {
-		
-		Pageable pageable = PageRequest.of(pageNumber, pageLimit);
-		
-		Page<StockQuoteJpaEntity> content = repository.findBySymbol(symbol, pageable);
-		
-		return getPagedList(content);
+		if (symbol != null && !symbol.isBlank()) {
+			Page<StockQuoteJpaEntity> content = repository.findAll( StockQuoteSpecs.bySymbolEqual(symbol), pageable );
+			return getPagedList(content);
+		} else {
+			Page<StockQuoteJpaEntity> content = repository.findAll( pageable );
+			return getPagedList(content);
+		}
 		
 	}
 	

@@ -80,7 +80,7 @@ final class StockPersisteceAdapterTests {
 		
 		persisteceAdapter.save(firstQuery);
 		
-		PagedList<StockQuote> page = persisteceAdapter.getAll(0, 10);
+		PagedList<StockQuote> page = persisteceAdapter.getAll(null, 0, 10);
 		
 		assertEquals(1, page.getTotalElements());
 		
@@ -93,7 +93,7 @@ final class StockPersisteceAdapterTests {
 		
 		persisteceAdapter.save(firstQuery);
 		
-		PagedList<StockQuote> page = persisteceAdapter.getBySymbol(AAPLStockQuoteTestData.AAPL, 0, 10);
+		PagedList<StockQuote> page = persisteceAdapter.getAll(AAPLStockQuoteTestData.AAPL, 0, 10);
 		
 		assertEquals(1, page.getTotalElements());
 		
