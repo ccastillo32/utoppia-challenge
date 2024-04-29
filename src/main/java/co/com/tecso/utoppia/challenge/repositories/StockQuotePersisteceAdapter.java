@@ -40,11 +40,19 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 		
 		LocalDateTime startDate = localDate.atStartOfDay();
 		LocalDateTime endDate = localDate.atTime(23, 59, 59);
-		StockQuoteJpaEntity entity = repository.getBySymbolBetweenDates(stockSymbol, startDate, endDate);
 		
-		return entity != null 
-					? Optional.of( entity.toStockQuote() )
-					: Optional.empty();
+		Specification<StockQuoteJpaEntity> spec = StockQuoteSpecs
+				.bySymbolEqual(stockSymbol)
+				.and( StockQuoteSpecs.byStartDate(startDate) )
+				.and( StockQuoteSpecs.byEndDate(endDate) );
+		
+		Optional<StockQuoteJpaEntity> data = repository.findOne( spec );
+		
+		if (!data.isPresent()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of( data.get().toStockQuote() );
 		
 	}
 
