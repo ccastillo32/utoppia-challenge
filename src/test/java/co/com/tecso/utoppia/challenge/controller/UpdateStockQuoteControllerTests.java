@@ -1,45 +1,55 @@
 package co.com.tecso.utoppia.challenge.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.then;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+import com.google.gson.Gson;
 
+import co.com.tecso.utoppia.challenge.application.UpdateQuoteCommand;
+import co.com.tecso.utoppia.challenge.application.UpdateStockQuoteUseCase;
+import co.com.tecso.utoppia.challenge.repositories.StockQuoteJpaRepository;
+
+@WebMvcTest(controllers = UpdateStockQuoteController.class)
 final class UpdateStockQuoteControllerTests {
 
-	 @Autowired
-	 private TestRestTemplate restTemplate;
+	@Autowired
+	private MockMvc mockMvc;
+	
+	@MockBean
+	private StockQuoteJpaRepository jpaRepository;
+
+	@MockBean
+	private UpdateStockQuoteUseCase useCase;
 
 	 @Test
-	 void stockQuoteSuccessfullyUpdate() {
+	 void stockQuoteSuccessfullyUpdate() throws Exception {
+		 
+		 Gson gson = new Gson();
 		 
 		 UpdateQuoteRequest body = new UpdateQuoteRequest("MSFT");
 		 
-		 HttpHeaders headers = new HttpHeaders();
-		 headers.add("Content-Type", "application/json");
-		 HttpEntity<UpdateQuoteRequest> request = new HttpEntity<>(body, headers);
+		 mockMvc.perform(
+			 MockMvcRequestBuilders
+			 	.post("/api/stock-quotes/update",
+			 			body)
+			 	.content( gson.toJson(body) )
+			 	.contentType(MediaType.APPLICATION_JSON)
+		)
+		.andExpect(	MockMvcResultMatchers.status().isNoContent() );
 		 
-		 ResponseEntity<Void> response = restTemplate.exchange(
-	                "/api/stock-quotes/update",
-	                HttpMethod.POST,
-	                request,
-	                Void.class
-	     );
+		 UpdateQuoteCommand command = UpdateQuoteCommand.of("MSFT");
 		 
-		 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+		 then( useCase ).should().updateStockQuote( eq(command) );
 		 
 	 }
-	
-	
 	
 }
