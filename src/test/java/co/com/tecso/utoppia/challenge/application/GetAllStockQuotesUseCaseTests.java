@@ -18,7 +18,7 @@ final class GetAllStockQuotesUseCaseTests {
 	@Test
 	void findBySymbol() {
 		
-		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(AAPLStockQuoteTestData.AAPL, 0, 10);
+		GetAllStockQuotesQuery query = GetAllStockQuotesQuery.of(AAPLStockQuoteTestData.AAPL, 0, 10, null, null);
 		
 		Mockito.when( getStoredQuotesService.getAll(query))
 		       .thenReturn( AAPLStockQuoteTestData.pagedList() );

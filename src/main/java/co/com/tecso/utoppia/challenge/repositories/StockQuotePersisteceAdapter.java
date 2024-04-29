@@ -1,7 +1,6 @@
 package co.com.tecso.utoppia.challenge.repositories;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,13 +37,14 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 	@Override
 	public Optional<StockQuote> getLatestStoredQuoteByDate(String stockSymbol, LocalDate localDate) {
 		
-		LocalDateTime startDate = localDate.atStartOfDay();
-		LocalDateTime endDate = localDate.atTime(23, 59, 59);
+		Specification<StockQuoteJpaEntity> spec = getSpecification(
+				stockSymbol,
+				localDate,
+				localDate);
 		
-		Specification<StockQuoteJpaEntity> spec = StockQuoteSpecs
-				.bySymbolEqual(stockSymbol)
-				.and( StockQuoteSpecs.byStartDate(startDate) )
-				.and( StockQuoteSpecs.byEndDate(endDate) );
+		if (spec == null) {
+			throw new IllegalArgumentException("Malformed specification");
+		}
 		
 		Optional<StockQuoteJpaEntity> data = repository.findOne( spec );
 		
@@ -61,8 +61,13 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 		
 		Pageable pageable = PageRequest.of(query.pageNumber(), query.pageSize());
 		
-		Page<StockQuoteJpaEntity> content = query.hasParameters()
-				? repository.findAll( getSpecification(query), pageable )
+		Specification<StockQuoteJpaEntity> spec = getSpecification(
+				query.stockSymbol(),
+				query.startDate(),
+				query.endDate());
+		
+		Page<StockQuoteJpaEntity> content = spec != null 
+				? repository.findAll( spec, pageable )
 				: repository.findAll(pageable);
 		
 		return getPagedList(content);
@@ -83,8 +88,26 @@ public class StockQuotePersisteceAdapter implements StockQuoteSaver, GetStoredQu
 		);
 	}
 	
-	private Specification<StockQuoteJpaEntity> getSpecification(GetAllStockQuotesQuery query) {
-		return StockQuoteSpecs.bySymbolEqual( query.stockSymbol() );
+	private Specification<StockQuoteJpaEntity> getSpecification(String stockSymbol, LocalDate startDate, LocalDate endDate) {
+		Specification<StockQuoteJpaEntity> spec = null;
+		
+		if (stockSymbol != null && !stockSymbol.isBlank()) {
+			spec = StockQuoteSpecs.bySymbolEqual( stockSymbol );
+		}
+		
+		if (startDate != null) {
+			spec = spec != null 
+						? spec.and( StockQuoteSpecs.byStartDate(startDate.atStartOfDay()))
+						: StockQuoteSpecs.byStartDate(startDate.atStartOfDay());
+		}
+		
+		if (endDate != null) {
+			spec = spec != null 
+						? spec.and( StockQuoteSpecs.byEndDate(endDate.atTime(23, 59, 59)))
+						: StockQuoteSpecs.byEndDate(endDate.atTime(23, 59, 59));
+		}
+		
+		return spec;
 	}
 	
 }
