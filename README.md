@@ -90,10 +90,10 @@ Retrieve and display stored stock data from a database to the user.
 #### Request:
 
 ```
-GET http://localhost:8080/api/stock-quotes?symbol=AAPL&pageNumber=0&pageSize=5
+GET http://localhost:8080/api/stock-quotes?&symbol=AAPL&startDate=2024-04-28&endDate=2024-04-29&pageNumber=0&pageSize=10
 ```
 
-None of the parameters are required. If none of them are indicated, the application will return all the stock quotes stored, applying default pagination values for it.
+None of the parameters are required. If none of them are indicated, the application will try to apply default values in order to make a valid request.
 
 
 #### Response:
